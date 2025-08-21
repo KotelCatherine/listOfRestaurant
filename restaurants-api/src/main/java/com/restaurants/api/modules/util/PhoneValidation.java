@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface PhoneValidation {
 
     // Сообщение об ошибке, выводимое при нарушении валидации
-    String message() default "Invalid email format";
+    String message() default "Invalid number phone format";
 
     // Определение групп валидации (обычно используется при сложных сценариях валидации)
     Class<?>[] groups() default {};

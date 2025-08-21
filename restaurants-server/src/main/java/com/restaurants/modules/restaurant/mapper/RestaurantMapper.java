@@ -5,7 +5,6 @@ import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
 import com.restaurants.modules.restaurant.entity.Restaurant;
-import com.restaurants.modules.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -56,6 +55,14 @@ public class RestaurantMapper {
         return new FindRestaurantDto()
                 .name(restaurant.name());
 
+    }
+
+    public RestaurantDto mapToRestaurantDto(Restaurant restaurant) {
+        return new RestaurantDto()
+                .id(restaurant.id())
+                .name(restaurant.name())
+                .phone(restaurant.phone())
+                .email(restaurant.email());
     }
 
 }

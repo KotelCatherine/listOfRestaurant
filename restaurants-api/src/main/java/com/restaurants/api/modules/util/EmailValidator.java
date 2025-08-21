@@ -4,8 +4,6 @@ package com.restaurants.api.modules.util;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class EmailValidator implements ConstraintValidator<EmailValidation, String> {
@@ -37,11 +35,8 @@ public class EmailValidator implements ConstraintValidator<EmailValidation, Stri
 
     // Основной метод, реализующий логику проверки валидности email-значения
 
-    private static final Logger logger = LoggerFactory.getLogger(EmailValidator.class);
-
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        logger.debug("Validating email: {}", value);
         // Null и пустые строки считаются допустимыми значениями.
 
         // Это поведение согласуется с подходом "аннотация делает одну задачу" —

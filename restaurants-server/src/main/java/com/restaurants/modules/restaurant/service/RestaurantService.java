@@ -44,7 +44,7 @@ public class RestaurantService {
         Restaurant restaurant = restaurantMapper.mapToEntity(request);
         restaurantRepository.saveAndFlush(restaurant);
 
-        return new RestaurantDto().id(restaurant.id());
+        return restaurantMapper.mapToRestaurantDto(restaurant);
 
     }
 
