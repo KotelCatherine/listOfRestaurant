@@ -1,0 +1,81 @@
+package com.restaurants.modules.restaurant.api.conroller;
+
+import com.restaurants.api.exception.RestaurantException;
+import com.restaurants.api.modules.restaurant.dto.FindRestaurantDto;
+import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
+import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
+import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
+import com.restaurants.api.resource.RestaurantResource;
+import com.restaurants.modules.restaurant.service.RestaurantService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+/*RestaurantController — это контроллер, который обрабатывает HTTP-запросы, связанные с ресторанами.
+Он использует RestaurantService для выполнения бизнес-логики. Метод create(CreateRestaurantRequest request)
+должен обрабатывать запрос на создание нового ресторана. В текущем виде он возвращает null, но в реальном приложении
+он должен будет создавать новый объект Restaurant на основе данных из CreateRestaurantRequest,
+сохранять его через RestaurantService и возвращать объект RestaurantDto.*/
+
+@RequestMapping("restaurant")
+@RestController
+@RequiredArgsConstructor
+@Validated
+public class RestaurantController implements RestaurantResource {
+
+    private final RestaurantService restaurantService;
+
+    @Override
+    @PostMapping
+    public RestaurantDto create(@RequestBody @Valid CreateRestaurantRequest request) throws RestaurantException {
+        return restaurantService.create(request);
+    }
+
+    @PostMapping("/test-validation")
+    public ResponseEntity<?> testValidation(@RequestBody @Valid CreateRestaurantRequest request) {
+        return ResponseEntity.ok("Validation passed for: " + request.name());
+    }
+
+    @Override
+    @GetMapping("/{id}")
+    public FindRestaurantDto findRestaurant(@PathVariable UUID id) throws RestaurantException {
+        return restaurantService.findById(id);
+    }
+
+    @Override
+    @GetMapping
+    public Page<RestaurantDto> getAllRestaurants(@ParameterObject Pageable pageable) {
+        return restaurantService.getAllRestaurants(pageable);
+    }
+
+    @Override
+    @GetMapping("/search")
+    public List<RestaurantDto> searchRestaurantsByName(
+            @RequestParam String nameQuery) {
+        return restaurantService.searchRestaurantsByName(nameQuery);
+    }
+
+    @Override
+    @PostMapping("/{id}")
+    public RestaurantDto update(
+            @PathVariable UUID id,
+            @RequestBody UpdateRestaurantRequest request) throws RestaurantException {
+        return restaurantService.update(id, request);
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable UUID id) {
+        restaurantService.delete(id);
+    }
+
+}
+

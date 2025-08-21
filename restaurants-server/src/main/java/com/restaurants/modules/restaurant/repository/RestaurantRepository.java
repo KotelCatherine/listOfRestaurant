@@ -1,0 +1,31 @@
+package com.restaurants.modules.restaurant.repository;
+
+import com.restaurants.modules.restaurant.entity.Restaurant;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.UUID;
+
+/*RestaurantRepository — это интерфейс репозитория, который будет использоваться для взаимодействия с базой данных.
+ Он может расширять один из интерфейсов Spring Data JPA (например, JpaRepository), чтобы получить стандартные методы для
+ работы с сущностью Restaurant, такие как сохранение, поиск и удаление ресторанов.*/
+
+@Repository
+public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
+
+    Restaurant findByNameIgnoreCase(String name);
+
+    @Query("""         
+            select r from restaurants r
+            where lower(r.name) like lower(concat('%', :query, '%'))
+            """)
+    List<Restaurant> findByName(@Param("query") String query);
+
+    boolean existsByNameIgnoreCase(String name);
+
+    boolean existsByName(String name);
+
+}
