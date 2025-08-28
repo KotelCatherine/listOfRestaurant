@@ -13,13 +13,17 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @Accessors(fluent = true)
 public class ErrorResponse {
+
     @Schema(description = "Описание ошибки")
     @JsonProperty("description")
     private String description;
+
     @Schema(description = "Код ошибки")
     @JsonProperty("errorCode")
     private String errorCode;
+
     @Schema(description = "Статус ошибки")
     @JsonProperty("status")
     private HttpStatus status;
+
 }

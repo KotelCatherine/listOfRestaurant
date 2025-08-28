@@ -25,11 +25,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-//TODO: Дописать тесты
 @SpringBootTest
 public class RestaurantServiceTest extends TestContainerInitialization {
 
     private static final String DEFAULT_RESTAURANT_NAME = "naym";
+    private static final String DEFAULT_VALID_PHONE_NUMBER = "+79333258846";
+    private static final String DEFAULT_VALID_EMAIL = "ya@gu.ru";
 
     @Autowired
     private RestaurantService restaurantService;
@@ -91,7 +92,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     @Test
     void findById_whenRestaurantExists_thenReturnRestaurant() {
 
-        Restaurant restaurant = createRestaurant("Нямням");
+        Restaurant restaurant = createRestaurant(DEFAULT_RESTAURANT_NAME);
 
         FindRestaurantDto result = Assertions.assertDoesNotThrow(() -> restaurantService.findById(restaurant.id()));
 
@@ -102,7 +103,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     @Test
     void findById_whenRestaurantDoesNotExist_thenReturnNull() {
 
-        createRestaurant("Нямням");
+        createRestaurant(DEFAULT_RESTAURANT_NAME);
 
         RestaurantException exception = Assertions.assertThrows(RestaurantException.class, () -> restaurantService.findById(UUID.randomUUID()));
 
@@ -113,7 +114,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     @Test
     void update_whenRestaurantDoesNotExist_thenThrow() {
 
-        createRestaurant("FoodCore");
+        createRestaurant(DEFAULT_RESTAURANT_NAME);
 
         RestaurantException exception = Assertions.assertThrows(RestaurantException.class, () -> restaurantService.update(
                 UUID.randomUUID(), getUpdateRestaurantRequest(null, null)));
@@ -126,14 +127,14 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     @Transactional
     void update_whenRestaurantExist_thenUpdate() {
 
-        Restaurant restaurant = createRestaurant("FoodCore");
+        Restaurant restaurant = createRestaurant(DEFAULT_RESTAURANT_NAME);
         UUID id = restaurant.id();
 
         UpdateRestaurantRequest request = getUpdateRestaurantRequest(null, null);
 
         RestaurantDto result = Assertions.assertDoesNotThrow(() -> restaurantService.update(id, request));
 
-        Assertions.assertEquals("Food", result.name());
+        Assertions.assertEquals(DEFAULT_RESTAURANT_NAME, result.name());
 
     }
 
@@ -164,6 +165,30 @@ public class RestaurantServiceTest extends TestContainerInitialization {
         Assertions.assertThrows(ConstraintViolationException.class, () -> restaurantService.update(id, request));
 
     }
+
+    @Test
+    void delete_whenRestaurantDoNotFind_thenThrow() {
+
+        createRestaurant(DEFAULT_RESTAURANT_NAME);
+        UUID id = UUID.randomUUID();
+        RestaurantException exception = Assertions.assertThrows(RestaurantException.class, () -> restaurantService.delete(id));
+
+        Assertions.assertEquals(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID.errorCode(), exception.errorCode());
+
+    }
+
+    @Test
+    void delete_whenRestaurantDoNotFind_thenDelete() {
+
+        Restaurant restaurant = createRestaurant(DEFAULT_RESTAURANT_NAME);
+        UUID id = restaurant.id();
+
+        Assertions.assertTrue(restaurantRepository.existsById(id));
+        Assertions.assertDoesNotThrow(() -> restaurantService.delete(id));
+        Assertions.assertFalse(restaurantRepository.existsById(id));
+
+    }
+
 
     private CreateRestaurantRequest getCreateRestaurantRequest(String name, String phone, String email) {
         return new CreateRestaurantRequest()
@@ -209,21 +234,21 @@ public class RestaurantServiceTest extends TestContainerInitialization {
 
     private Stream<Arguments> createValidData() {
         return Stream.of(
-                Arguments.of("+79333258846", "ya@gu.ru"),
-                Arguments.of(null, "ya@gu.ru"),
-                Arguments.of("+79333258846", null),
-                Arguments.of("+79333258846", "ya@gu.com"),
+                Arguments.of(DEFAULT_VALID_PHONE_NUMBER, DEFAULT_VALID_EMAIL),
+                Arguments.of(null, DEFAULT_VALID_EMAIL),
+                Arguments.of(DEFAULT_VALID_PHONE_NUMBER, null),
+                Arguments.of(DEFAULT_VALID_PHONE_NUMBER, "ya@gu.com"),
                 Arguments.of("89333258846", "ya@gu.com")
         );
     }
 
     private Stream<Arguments> createInvalidData() {
         return Stream.of(
-                Arguments.of("+79333258846", "yagu.ru"),
-                Arguments.of("+7933325884", "ya@gu.ru"),
-                Arguments.of("8933325884", "ya@gu.ru"),
-                Arguments.of("79333258846", "ya@gu.ru"),
-                Arguments.of("+79333258846", "ya@guru")
+                Arguments.of(DEFAULT_VALID_PHONE_NUMBER, "yagu.ru"),
+                Arguments.of("+7933325884", DEFAULT_VALID_EMAIL),
+                Arguments.of("8933325884", DEFAULT_VALID_EMAIL),
+                Arguments.of("79333258846", DEFAULT_VALID_EMAIL),
+                Arguments.of(DEFAULT_VALID_PHONE_NUMBER, "ya@guru")
         );
     }
 }

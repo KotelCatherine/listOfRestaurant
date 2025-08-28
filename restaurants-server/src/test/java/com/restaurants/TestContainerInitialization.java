@@ -26,6 +26,4 @@ public class TestContainerInitialization {
         registry.add("spring.datasource.password", postgresqlContainer::getPassword);
     }
 
-
-
 }

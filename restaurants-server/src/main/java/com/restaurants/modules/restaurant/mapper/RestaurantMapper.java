@@ -27,14 +27,12 @@ public class RestaurantMapper {
     }
 
     public Restaurant mapToRestaurant(UpdateRestaurantRequest request, Restaurant restaurant) {
-
         return restaurant
                 .name(request.name())
                 .description(request.description())
                 .phone(request.phone())
                 .email(request.email())
                 .website(request.website());
-
     }
 
     public Restaurant mapToEntity(CreateRestaurantRequest request) {
@@ -51,10 +49,9 @@ public class RestaurantMapper {
                 .createdBy("system");
     }
 
-    public FindRestaurantDto mapToFindRestaurant(Restaurant restaurant){
+    public FindRestaurantDto mapToFindRestaurantDto(Restaurant restaurant) {
         return new FindRestaurantDto()
                 .name(restaurant.name());
-
     }
 
     public RestaurantDto mapToRestaurantDto(Restaurant restaurant) {

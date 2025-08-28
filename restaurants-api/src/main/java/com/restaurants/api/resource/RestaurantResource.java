@@ -13,6 +13,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,27 +35,27 @@ public interface RestaurantResource {
     @PostMapping
     @Operation(operationId = "createRestaurantUsingPost", summary = "Создание ресторана")
     @ResponseStatus(HttpStatus.CREATED)
-    RestaurantDto create(@RequestBody @Valid CreateRestaurantRequest request) throws RestaurantException;
+    ResponseEntity<RestaurantDto> create(@RequestBody @Valid CreateRestaurantRequest request) throws RestaurantException;
 
     @GetMapping("/{id}")
     @Operation(operationId = "findRestaurantUsingGet", summary = "Поиск ресторана")
-    FindRestaurantDto findRestaurant(@PathVariable UUID id) throws RestaurantException;
+    ResponseEntity<FindRestaurantDto> findRestaurant(@PathVariable UUID id) throws RestaurantException;
 
     @GetMapping
     @Operation(summary = "Получить список ресторанов")
-    Page<RestaurantDto> getAllRestaurants(@ParameterObject Pageable pageable);
+    ResponseEntity<Page<RestaurantDto>> getAllRestaurants(@ParameterObject Pageable pageable);
 
     @GetMapping("/search")
     @Operation(summary = "Поиск ресторанов по названию")
-    List<RestaurantDto> searchRestaurantsByName(
+    ResponseEntity<List<RestaurantDto>> searchRestaurantsByName(
             @RequestParam String nameQuery);
 
     @PostMapping("/{id}")
     @Operation(operationId = "updateRestaurantUsingPost", summary = "Обновление ресторана")
-    RestaurantDto update(@PathVariable UUID id, @RequestBody UpdateRestaurantRequest request) throws RestaurantException;
+    ResponseEntity<RestaurantDto>  update(@PathVariable UUID id, @RequestBody UpdateRestaurantRequest request) throws RestaurantException;
 
     @DeleteMapping("/{id}")
     @Operation(operationId = "deleteRestaurantUsingDelete", summary = "Удаление ресторана")
-    void delete(@PathVariable UUID id);
+    ResponseEntity<Void> delete(@PathVariable UUID id) throws RestaurantException;
 
 }

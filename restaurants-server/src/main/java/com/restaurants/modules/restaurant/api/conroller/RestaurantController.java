@@ -10,6 +10,7 @@ import com.restaurants.modules.restaurant.service.RestaurantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -31,50 +32,59 @@ import java.util.UUID;
 @Validated
 public class RestaurantController implements RestaurantResource {
 
+    @Autowired
     private final RestaurantService restaurantService;
 
     @Override
     @PostMapping
-    public RestaurantDto create(@RequestBody @Valid CreateRestaurantRequest request) throws RestaurantException {
-        return restaurantService.create(request);
-    }
+    public ResponseEntity<RestaurantDto> create(@RequestBody @Valid CreateRestaurantRequest request) throws RestaurantException {
 
-    @PostMapping("/test-validation")
-    public ResponseEntity<?> testValidation(@RequestBody @Valid CreateRestaurantRequest request) {
-        return ResponseEntity.ok("Validation passed for: " + request.name());
+        RestaurantDto restaurantDto = restaurantService.create(request);
+
+        return ResponseEntity.ok(restaurantDto);
+
     }
 
     @Override
     @GetMapping("/{id}")
-    public FindRestaurantDto findRestaurant(@PathVariable UUID id) throws RestaurantException {
-        return restaurantService.findById(id);
+    public ResponseEntity<FindRestaurantDto> findRestaurant(@PathVariable UUID id) throws RestaurantException {
+
+        FindRestaurantDto restaurantDto = restaurantService.findById(id);
+
+        return ResponseEntity.ok(restaurantDto);
     }
 
     @Override
     @GetMapping
-    public Page<RestaurantDto> getAllRestaurants(@ParameterObject Pageable pageable) {
-        return restaurantService.getAllRestaurants(pageable);
+    public ResponseEntity<Page<RestaurantDto>> getAllRestaurants(@ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(restaurantService.getAllRestaurants(pageable));
     }
 
     @Override
     @GetMapping("/search")
-    public List<RestaurantDto> searchRestaurantsByName(
+    public ResponseEntity<List<RestaurantDto>> searchRestaurantsByName(
             @RequestParam String nameQuery) {
-        return restaurantService.searchRestaurantsByName(nameQuery);
+        List<RestaurantDto> restaurants = restaurantService.searchRestaurantsByName(nameQuery);
+        return ResponseEntity.ok(restaurants);
     }
 
     @Override
     @PostMapping("/{id}")
-    public RestaurantDto update(
+    public ResponseEntity<RestaurantDto> update(
             @PathVariable UUID id,
             @RequestBody UpdateRestaurantRequest request) throws RestaurantException {
-        return restaurantService.update(id, request);
+        RestaurantDto updatedRestaurant = restaurantService.update(id, request);
+        return ResponseEntity.ok(updatedRestaurant);
     }
 
     @Override
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) throws RestaurantException {
+
         restaurantService.delete(id);
+
+        return ResponseEntity.ok().build();
+
     }
 
 }

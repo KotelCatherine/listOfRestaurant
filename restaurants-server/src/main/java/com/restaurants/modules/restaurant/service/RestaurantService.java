@@ -53,7 +53,7 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID));
 
-        return restaurantMapper.mapToFindRestaurant(restaurant);
+        return restaurantMapper.mapToFindRestaurantDto(restaurant);
 
     }
 
@@ -71,9 +71,10 @@ public class RestaurantService {
 
     }
 
-
     @Transactional
-    public void delete(UUID id) {
+    public void delete(UUID id) throws RestaurantException {
+
+        isExist(id);
         restaurantRepository.deleteById(id);
     }
 
@@ -110,6 +111,14 @@ public class RestaurantService {
 
         if (restaurantRepository.existsByNameIgnoreCase(name)) {
             throw new RestaurantException(RestaurantErrorCodeEnum.RESTAURANT_NAME_ALREADY_EXISTS);
+        }
+
+    }
+
+    private void isExist(UUID id) throws RestaurantException {
+
+        if (!restaurantRepository.existsById(id)) {
+            throw new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID);
         }
 
     }

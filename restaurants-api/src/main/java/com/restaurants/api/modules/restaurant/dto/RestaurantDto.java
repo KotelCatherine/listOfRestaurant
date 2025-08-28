@@ -1,8 +1,6 @@
 package com.restaurants.api.modules.restaurant.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.restaurants.api.modules.util.EmailValidation;
-import com.restaurants.api.modules.util.PhoneValidation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,12 +38,10 @@ public class RestaurantDto {
 
     @Schema(description = "Номер телефона ресторана")
     @JsonProperty("phone")
-    @PhoneValidation
     private String phone;
 
     @Schema(description = "Email почта")
     @JsonProperty("email")
-    @EmailValidation
     private String email;
 
     @Schema(description = "Вебсайт ресторана")

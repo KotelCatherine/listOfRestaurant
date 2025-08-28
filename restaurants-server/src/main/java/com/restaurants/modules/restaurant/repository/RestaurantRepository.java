@@ -16,8 +16,6 @@ import java.util.UUID;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
 
-    Restaurant findByNameIgnoreCase(String name);
-
     @Query("""         
             select r from restaurants r
             where lower(r.name) like lower(concat('%', :query, '%'))
