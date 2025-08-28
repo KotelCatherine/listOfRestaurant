@@ -50,7 +50,6 @@ class CuisineServiceTest extends TestContainerInitialization {
 
         Assertions.assertDoesNotThrow(() -> service.createCuisine(request));
 
-
     }
 
     private CreateCuisineRequest getCreateCuisineRequest(String name) {
@@ -70,6 +69,5 @@ class CuisineServiceTest extends TestContainerInitialization {
         return cuisine;
 
     }
-
 
 }

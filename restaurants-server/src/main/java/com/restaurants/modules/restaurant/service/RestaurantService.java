@@ -2,12 +2,17 @@ package com.restaurants.modules.restaurant.service;
 
 import com.restaurants.api.exception.RestaurantErrorCodeEnum;
 import com.restaurants.api.exception.RestaurantException;
+import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.dto.FindRestaurantDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
+import com.restaurants.modules.restaurant.entity.Cuisine;
 import com.restaurants.modules.restaurant.entity.Restaurant;
+import com.restaurants.modules.restaurant.entity.RestaurantCuisines;
 import com.restaurants.modules.restaurant.mapper.RestaurantMapper;
+import com.restaurants.modules.restaurant.repository.CuisinesRepository;
+import com.restaurants.modules.restaurant.repository.RestaurantCuisinesRepository;
 import com.restaurants.modules.restaurant.repository.RestaurantRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +36,10 @@ import java.util.UUID;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final RestaurantCuisinesRepository restaurantCuisinesRepository;
+    private final CuisinesRepository cuisinesRepository;
 
     private final RestaurantMapper restaurantMapper;
-
-    //TODO: не работает валидация request'a, закончить ресторан-сервис(mapToDto<->mapToEntity),
-    // должны проверяться все точки входа и выхода, написать аннотацию для телефона
 
     @Transactional(rollbackFor = Exception.class)
     public RestaurantDto create(@Valid CreateRestaurantRequest request) throws RestaurantException {
@@ -74,8 +78,12 @@ public class RestaurantService {
     @Transactional
     public void delete(UUID id) throws RestaurantException {
 
-        isExist(id);
+        if (!restaurantRepository.existsById(id)) {
+            throw new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID);
+        }
+
         restaurantRepository.deleteById(id);
+
     }
 
     @Transactional(readOnly = true)
@@ -115,11 +123,62 @@ public class RestaurantService {
 
     }
 
-    private void isExist(UUID id) throws RestaurantException {
+    public List<CuisineDto> findAllCuisines(UUID restaurantId) throws RestaurantException {
 
-        if (!restaurantRepository.existsById(id)) {
-            throw new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID);
+        List<RestaurantCuisines> restaurantCuisines = restaurantCuisinesRepository.findAllByRestaurantId(restaurantId);
+
+        return restaurantCuisines.stream()
+                .map(rc -> {
+                    try {
+                        Cuisine cuisine = cuisinesRepository.findById(rc.id())
+                                .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
+                        return restaurantMapper.mapToCuisineDto(cuisine);
+                    } catch (RestaurantException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toList();
+
+
+        /*List<CuisineDto> result = new ArrayList<>();
+
+        for (RestaurantCuisines cuisines: restaurantCuisines) {
+
+            UUID cuisineId = cuisines.cuisineId();
+            Cuisine cuisine = cuisinesRepository.findById(cuisineId)
+                    .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
+
+            CuisineDto cuisineDto = restaurantMapper.mapToCuisineDto(cuisine);
+            result.add(cuisineDto);
+
+        }*/
+
+    }
+
+    public List<RestaurantDto> findAllRestaurants(UUID cuisineId) throws RestaurantException {
+
+        cuisinesRepository.findById(cuisineId)
+                .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
+
+        List<RestaurantCuisines> allByCuisineId = restaurantCuisinesRepository.findAllByCuisineId(cuisineId);
+
+        if (allByCuisineId.isEmpty()){
+            return List.of();
         }
+
+        List<RestaurantDto> restaurants = new ArrayList<>();
+
+        for (RestaurantCuisines restaurantCuisines: allByCuisineId) {
+
+            UUID restaurantId = restaurantCuisines.restaurantId();
+            Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                    .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID));
+
+            restaurants.add(restaurantMapper.mapToRestaurantDto(restaurant));
+
+        }
+
+        return restaurants;
 
     }
 

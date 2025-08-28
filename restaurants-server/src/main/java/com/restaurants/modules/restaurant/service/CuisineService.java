@@ -4,6 +4,7 @@ import com.restaurants.api.exception.CuisineErrorCodeEnum;
 import com.restaurants.api.exception.CuisineException;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.request.CreateCuisineRequest;
+import com.restaurants.api.modules.restaurant.request.UpdateCuisineRequest;
 import com.restaurants.modules.restaurant.entity.Cuisine;
 import com.restaurants.modules.restaurant.mapper.CuisineMapper;
 import com.restaurants.modules.restaurant.repository.CuisinesRepository;
@@ -65,6 +66,7 @@ public class CuisineService {
 
     }
 
-
-
+    public CuisineDto updateCuisine(@Valid UpdateCuisineRequest request) {
+        return null;
+    }
 }

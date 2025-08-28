@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS restaurants
 CREATE TABLE IF NOT EXISTS cuisines
 (
 
-    id          uuid PRIMARY KEY,
+    id          uuid   PRIMARY KEY,
     version_id  bigint NOT NULL DEFAULT 1,
     name        text   NOT NULL,
     description text

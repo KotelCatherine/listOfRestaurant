@@ -3,6 +3,7 @@ package com.restaurants.api.resource;
 import com.restaurants.api.exception.CuisineException;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.request.CreateCuisineRequest;
+import com.restaurants.api.modules.restaurant.request.UpdateCuisineRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,6 +32,10 @@ public interface CuisineResource {
     @PostMapping
     @Operation(operationId = "addCuisine", summary = "Добавить кухню")
     ResponseEntity<CuisineDto> createCuisine(@Valid @RequestBody CreateCuisineRequest request) throws CuisineException;
+
+    @PostMapping("/{id}")
+    @Operation(operationId = "updateCuisine", summary = "Обновить кухню")
+    ResponseEntity<CuisineDto> updateCuisine(@Valid @RequestBody UpdateCuisineRequest request);
 
     @DeleteMapping("/{id}")
     @Operation(operationId = "removeCuisine", summary = "Удалить кухню")

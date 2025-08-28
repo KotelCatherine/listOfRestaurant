@@ -1,11 +1,13 @@
 package com.restaurants.api.resource;
 
 import com.restaurants.api.exception.RestaurantException;
+import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.dto.FindRestaurantDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
@@ -57,5 +59,13 @@ public interface RestaurantResource {
     @DeleteMapping("/{id}")
     @Operation(operationId = "deleteRestaurantUsingDelete", summary = "Удаление ресторана")
     ResponseEntity<Void> delete(@PathVariable UUID id) throws RestaurantException;
+
+    @GetMapping("/{id}/cuisines")
+    @Operation(operationId = "findAllCuisineByRestaurantId", summary = "Список кухонь ресторана")
+    List<CuisineDto> findAllCuisinesByRestaurantId(@Parameter(description = "Id ресторана") @PathVariable UUID id) throws RestaurantException;
+
+    @GetMapping("/{cuisineId}/restaurant")
+    @Operation(operationId = "findAllRestaurantByCuisineId", summary = "Список ресторанов по кухне")
+    List<RestaurantDto> findAllRestaurantByCuisineId(@Parameter(description = "Id кухни") @PathVariable UUID cuisineId) throws RestaurantException;
 
 }

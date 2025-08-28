@@ -1,6 +1,7 @@
 package com.restaurants.modules.restaurant.api.conroller;
 
 import com.restaurants.api.exception.RestaurantException;
+import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.dto.FindRestaurantDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
@@ -52,6 +53,7 @@ public class RestaurantController implements RestaurantResource {
         FindRestaurantDto restaurantDto = restaurantService.findById(id);
 
         return ResponseEntity.ok(restaurantDto);
+
     }
 
     @Override
@@ -86,6 +88,18 @@ public class RestaurantController implements RestaurantResource {
         return ResponseEntity.ok().build();
 
     }
+
+    @Override
+    @GetMapping("/{id}/cuisines")
+    public List<CuisineDto> findAllCuisinesByRestaurantId(@PathVariable UUID id) throws RestaurantException {
+        return restaurantService.findAllCuisines(id);
+    }
+
+    @Override
+    public List<RestaurantDto> findAllRestaurantByCuisineId(UUID cuisineId) throws RestaurantException {
+        return restaurantService.findAllRestaurants(cuisineId);
+    }
+
 
 }
 

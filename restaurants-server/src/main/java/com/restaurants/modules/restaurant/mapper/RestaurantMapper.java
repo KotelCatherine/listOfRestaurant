@@ -1,9 +1,11 @@
 package com.restaurants.modules.restaurant.mapper;
 
+import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.dto.FindRestaurantDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
+import com.restaurants.modules.restaurant.entity.Cuisine;
 import com.restaurants.modules.restaurant.entity.Restaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -60,6 +62,14 @@ public class RestaurantMapper {
                 .name(restaurant.name())
                 .phone(restaurant.phone())
                 .email(restaurant.email());
+    }
+
+    public CuisineDto mapToCuisineDto(Cuisine cuisine) {
+        return new CuisineDto()
+                .id(cuisine.id())
+                .versionId(cuisine.versionId())
+                .name(cuisine.name())
+                .description(cuisine.description());
     }
 
 }

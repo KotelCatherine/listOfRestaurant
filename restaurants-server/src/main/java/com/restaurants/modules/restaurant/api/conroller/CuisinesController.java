@@ -3,6 +3,7 @@ package com.restaurants.modules.restaurant.api.conroller;
 import com.restaurants.api.exception.CuisineException;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.request.CreateCuisineRequest;
+import com.restaurants.api.modules.restaurant.request.UpdateCuisineRequest;
 import com.restaurants.api.resource.CuisineResource;
 import com.restaurants.modules.restaurant.service.CuisineService;
 import jakarta.validation.Valid;
@@ -43,6 +44,15 @@ public class CuisinesController implements CuisineResource {
         CuisineDto cuisine = cuisineService.createCuisine(request);
 
         return ResponseEntity.ok(cuisine);
+
+    }
+
+    @Override
+    public ResponseEntity<CuisineDto> updateCuisine(@Valid @RequestBody UpdateCuisineRequest request) {
+
+        CuisineDto cuisineDto = cuisineService.updateCuisine(request);
+
+        return ResponseEntity.ok(cuisineDto);
 
     }
 

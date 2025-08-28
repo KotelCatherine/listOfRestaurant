@@ -39,10 +39,5 @@ public class UpdateRestaurantRequest {
     @Schema(description = "Вебсайт ресторана")
     @JsonProperty("website")
     private String website;
-/*
-
-    @Schema(description = "Дата обновления данных о ресторане")
-    @JsonProperty
-*/
 
 }
