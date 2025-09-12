@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +28,7 @@ import java.util.UUID;
 он должен будет создавать новый объект Restaurant на основе данных из CreateRestaurantRequest,
 сохранять его через RestaurantService и возвращать объект RestaurantDto.*/
 
-@RequestMapping("restaurant")
+@RequestMapping(value = "restaurant", method = {RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.GET})
 @RestController
 @RequiredArgsConstructor
 @Validated

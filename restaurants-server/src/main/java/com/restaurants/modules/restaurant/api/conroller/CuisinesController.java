@@ -15,10 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.UUID;
 
-@RequestMapping("cuisine")
+@RequestMapping(value = "cuisine", method = {RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.GET})
 @RestController
 @RequiredArgsConstructor
 @Validated
