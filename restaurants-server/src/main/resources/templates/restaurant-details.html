@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title th:text="'Ресторан: ' + ${restaurant.name}">Детали ресторана</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="row mb-4">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/restaurants">Рестораны</a></li>
+                        <li class="breadcrumb-item active" th:text="${restaurant.name}">Название</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 th:text="${restaurant.name}">Название ресторана</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>📍 Контактная информация</h5>
+                                <p><strong>Адрес:</strong> <span th:text="${restaurant.address}">Адрес</span></p>
+                                <p><strong>Телефон:</strong> <span th:text="${restaurant.phoneNumber}">Телефон</span></p>
+                                <p><strong>Email:</strong> <span th:text="${restaurant.email}">Email</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>ℹ️ Дополнительная информация</h5>
+                                <p><strong>ID:</strong> <code th:text="${restaurant.id}">UUID</code></p>
+                                <p><strong>Статус:</strong> 
+                                    <span class="badge bg-success">Активен</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>🍳 Кухни ресторана</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${cuisines.empty}" class="alert alert-info">
+                            <p class="mb-0">У ресторана пока нет привязанных кухонь</p>
+                        </div>
+                        
+                        <div th:unless="${cuisines.empty}">
+                            <div th:each="cuisine : ${cuisines}" class="mb-2">
+                                <span class="badge bg-primary me-1" th:text="${cuisine.name}">Кухня</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>🔗 API ссылки</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><small>JSON данные:</small></p>
+                        <a th:href="@{/restaurant/{id}(id=${restaurant.id})}" 
+                           class="btn btn-sm btn-outline-secondary" 
+                           target="_blank">
+                            REST API
+                        </a>
+                        <a href="/swagger-ui.html" 
+                           class="btn btn-sm btn-outline-info ms-2" 
+                           target="_blank">
+                            Swagger UI
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col">
+                <a href="/restaurants" class="btn btn-secondary">
+                    ← Вернуться к списку
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

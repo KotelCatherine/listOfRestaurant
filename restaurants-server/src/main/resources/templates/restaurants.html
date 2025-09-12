@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title>Список ресторанов</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1>🍽️ Список ресторанов</h1>
+            </div>
+            <div class="col-md-4">
+                <form th:action="@{/search}" method="get" class="d-flex">
+                    <input type="text" name="nameQuery" class="form-control me-2" placeholder="Поиск по названию...">
+                    <button type="submit" class="btn btn-outline-primary">Поиск</button>
+                </form>
+            </div>
+        </div>
+
+        <div th:if="${restaurants.empty}" class="alert alert-info">
+            <h4>Рестораны не найдены</h4>
+            <p>В системе пока нет ресторанов. Добавьте их через API.</p>
+        </div>
+
+        <div th:unless="${restaurants.empty}" class="row">
+            <div th:each="restaurant : ${restaurants}" class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${restaurant.name}">Название ресторана</h5>
+                        <p class="card-text">
+                            <strong>Адрес:</strong> <span th:text="${restaurant.address}">Адрес</span><br>
+                            <strong>Телефон:</strong> <span th:text="${restaurant.phoneNumber}">Телефон</span><br>
+                            <strong>Email:</strong> <span th:text="${restaurant.email}">Email</span>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a th:href="@{/restaurants/{id}(id=${restaurant.id})}" class="btn btn-primary">
+                            Подробнее
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пагинация -->
+        <nav th:if="${totalPages > 1}" aria-label="Навигация по страницам">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/restaurants(page=${currentPage - 1}, size=${size})}">Предыдущая</a>
+                </li>
+                
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" 
+                    class="page-item" 
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/restaurants(page=${i}, size=${size})}" th:text="${i + 1}">1</a>
+                </li>
+                
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/restaurants(page=${currentPage + 1}, size=${size})}">Следующая</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="mt-4">
+            <p class="text-muted">
+                Показано <span th:text="${restaurants.size()}">0</span> из <span th:text="${totalElements}">0</span> ресторанов
+            </p>
+        </div>
+    </div>
+</body>
+</html>

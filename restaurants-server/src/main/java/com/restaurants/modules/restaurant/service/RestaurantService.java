@@ -7,7 +7,6 @@ import com.restaurants.api.modules.restaurant.dto.FindRestaurantDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
-import com.restaurants.modules.restaurant.entity.Cuisine;
 import com.restaurants.modules.restaurant.entity.Restaurant;
 import com.restaurants.modules.restaurant.entity.RestaurantCuisines;
 import com.restaurants.modules.restaurant.mapper.RestaurantMapper;
@@ -26,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -123,35 +123,16 @@ public class RestaurantService {
 
     }
 
-    public List<CuisineDto> findAllCuisines(UUID restaurantId) {
+    public List<CuisineDto> findAllCuisines(UUID restaurantId) throws RestaurantException {
 
         List<RestaurantCuisines> restaurantCuisines = restaurantCuisinesRepository.findAllByRestaurantId(restaurantId);
 
         return restaurantCuisines.stream()
-                .map(rc -> {
-                    try {
-                        Cuisine cuisine = cuisinesRepository.findById(rc.id())
-                                .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
-                        return restaurantMapper.mapToCuisineDto(cuisine);
-                    } catch (RestaurantException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
+                .map(rc -> cuisinesRepository.findById(rc.cuisineId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(restaurantMapper::mapToCuisineDto)
                 .toList();
-
-
-        /*List<CuisineDto> result = new ArrayList<>();
-
-        for (RestaurantCuisines cuisines: restaurantCuisines) {
-
-            UUID cuisineId = cuisines.cuisineId();
-            Cuisine cuisine = cuisinesRepository.findById(cuisineId)
-                    .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
-
-            CuisineDto cuisineDto = restaurantMapper.mapToCuisineDto(cuisine);
-            result.add(cuisineDto);
-
-        }*/
 
     }
 
