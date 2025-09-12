@@ -104,33 +104,38 @@
         const restaurantsData = [
             {
                 name: "Мама Мия",
-                address: "ул. Тверская, 15",
-                phoneNumber: "+7 (495) 123-45-67",
-                email: "mamamia@restaurant.ru"
+                description: "Аутентичная итальянская кухня в центре города",
+                phone: "+7 (495) 123-45-67",
+                email: "mamamia@restaurant.ru",
+                website: "https://mamamia.ru"
             },
             {
                 name: "Суши Мастер",
-                address: "пр. Невский, 28",
-                phoneNumber: "+7 (812) 987-65-43",
-                email: "sushi@master.ru"
+                description: "Свежие суши и роллы от японского шеф-повара",
+                phone: "+7 (812) 987-65-43",
+                email: "sushi@master.ru",
+                website: "https://sushimaster.ru"
             },
             {
                 name: "Эль Патио",
-                address: "ул. Арбат, 42",
-                phoneNumber: "+7 (495) 555-12-34",
-                email: "elpatio@mexico.ru"
+                description: "Мексиканская кухня с живой музыкой",
+                phone: "+7 (495) 555-12-34",
+                email: "elpatio@mexico.ru",
+                website: "https://elpatio.ru"
             },
             {
                 name: "Бистро Франсе",
-                address: "ул. Кузнецкий мост, 7",
-                phoneNumber: "+7 (495) 777-88-99",
-                email: "bistro@france.ru"
+                description: "Французская кухня в уютной атмосфере",
+                phone: "+7 (495) 777-88-99",
+                email: "bistro@france.ru",
+                website: "https://bistrofrance.ru"
             },
             {
                 name: "Дракон",
-                address: "ул. Садовая, 33",
-                phoneNumber: "+7 (495) 333-22-11",
-                email: "dragon@china.ru"
+                description: "Китайская кухня с традиционными блюдами",
+                phone: "+7 (495) 333-22-11",
+                email: "dragon@china.ru",
+                website: "https://dragon-china.ru"
             }
         ];
 
@@ -140,7 +145,7 @@
             
             try {
                 const promises = cuisinesData.map(cuisine => 
-                    fetch('/cuisines', {
+                    fetch('/cuisine', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -205,7 +210,7 @@
             try {
                 const [restaurantsRes, cuisinesRes] = await Promise.all([
                     fetch('/restaurant?size=1000'),
-                    fetch('/cuisines?size=1000')
+                    fetch('/cuisine?size=1000')
                 ]);
                 
                 const restaurants = await restaurantsRes.json();

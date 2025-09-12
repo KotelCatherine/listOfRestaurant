@@ -43,9 +43,10 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${restaurant.name}">Название ресторана</h5>
                         <p class="card-text">
-                            <strong>Адрес:</strong> <span th:text="${restaurant.address}">Адрес</span><br>
-                            <strong>Телефон:</strong> <span th:text="${restaurant.phoneNumber}">Телефон</span><br>
-                            <strong>Email:</strong> <span th:text="${restaurant.email}">Email</span>
+                            <strong>Описание:</strong> <span th:text="${restaurant.description}">Описание</span><br>
+                            <strong>Телефон:</strong> <span th:text="${restaurant.phone}">Телефон</span><br>
+                            <strong>Email:</strong> <span th:text="${restaurant.email}">Email</span><br>
+                            <strong>Сайт:</strong> <span th:text="${restaurant.website}">Сайт</span>
                         </p>
                     </div>
                     <div class="card-footer">
@@ -57,24 +58,12 @@
             </div>
         </div>
 
-        <!-- Пагинация -->
-        <nav th:if="${totalPages > 1}" aria-label="Навигация по страницам">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/restaurants(page=${currentPage - 1}, size=${size})}">Предыдущая</a>
-                </li>
-                
-                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" 
-                    class="page-item" 
-                    th:classappend="${i == currentPage} ? 'active'">
-                    <a class="page-link" th:href="@{/restaurants(page=${i}, size=${size})}" th:text="${i + 1}">1</a>
-                </li>
-                
-                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/restaurants(page=${currentPage + 1}, size=${size})}">Следующая</a>
-                </li>
-            </ul>
-        </nav>
+        <!-- Простая пагинация -->
+        <div th:if="${totalPages > 1}" class="text-center">
+            <p class="text-muted">
+                Страница <span th:text="${currentPage + 1}">1</span> из <span th:text="${totalPages}">1</span>
+            </p>
+        </div>
 
         <div class="mt-4">
             <p class="text-muted">

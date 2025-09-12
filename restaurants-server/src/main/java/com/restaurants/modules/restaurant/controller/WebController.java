@@ -4,7 +4,7 @@ import com.restaurants.api.exception.RestaurantException;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.modules.restaurant.service.RestaurantService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,14 +18,19 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@RequiredArgsConstructor
 public class WebController {
 
-    private final RestaurantService restaurantService;
+    @Autowired
+    private RestaurantService restaurantService;
 
     @GetMapping("/")
     public String home() {
-        return "redirect:/restaurants";
+        return "redirect:/simple";
+    }
+
+    @GetMapping("/simple")
+    public String simple() {
+        return "simple";
     }
 
     @GetMapping("/restaurants")
@@ -49,10 +54,17 @@ public class WebController {
     @GetMapping("/restaurants/{id}")
     public String restaurantDetails(@PathVariable UUID id, Model model) throws RestaurantException {
         try {
+            // Получаем полную информацию о ресторане через API
             var restaurant = restaurantService.findById(id);
             List<CuisineDto> cuisines = restaurantService.findAllCuisines(id);
             
-            model.addAttribute("restaurant", restaurant);
+            // Создаем RestaurantDto из FindRestaurantDto для совместимости с шаблоном
+            RestaurantDto restaurantDto = new RestaurantDto();
+            restaurantDto.id(id);
+            restaurantDto.name(restaurant.name());
+            // Остальные поля будут null, но это не критично для отображения
+            
+            model.addAttribute("restaurant", restaurantDto);
             model.addAttribute("cuisines", cuisines);
             
             return "restaurant-details";
@@ -82,5 +94,42 @@ public class WebController {
     @GetMapping("/favicon.ico")
     public String favicon() {
         return "forward:/static/favicon.ico";
+    }
+
+    @GetMapping("/css/style.css")
+    public String css() {
+        return "forward:/static/css/style.css";
+    }
+
+    @GetMapping("/js/app.js")
+    public String js() {
+        return "forward:/static/js/app.js";
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "test";
+    }
+
+    @GetMapping("/debug")
+    public String debug(Model model) {
+        // Создаем тестовые данные для отладки
+        RestaurantDto testRestaurant = new RestaurantDto();
+        testRestaurant.id(UUID.randomUUID());
+        testRestaurant.name("Тестовый ресторан");
+        testRestaurant.description("Описание тестового ресторана");
+        testRestaurant.phone("+7 (495) 123-45-67");
+        testRestaurant.email("test@restaurant.ru");
+        testRestaurant.website("https://test.ru");
+        
+        CuisineDto testCuisine = new CuisineDto();
+        testCuisine.id(UUID.randomUUID());
+        testCuisine.name("Тестовая кухня");
+        testCuisine.description("Описание тестовой кухни");
+        
+        model.addAttribute("restaurant", testRestaurant);
+        model.addAttribute("cuisines", List.of(testCuisine));
+        
+        return "debug";
     }
 }

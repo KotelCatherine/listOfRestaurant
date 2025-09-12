@@ -41,9 +41,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h5>📍 Контактная информация</h5>
-                                <p><strong>Адрес:</strong> <span th:text="${restaurant.address}">Адрес</span></p>
-                                <p><strong>Телефон:</strong> <span th:text="${restaurant.phoneNumber}">Телефон</span></p>
-                                <p><strong>Email:</strong> <span th:text="${restaurant.email}">Email</span></p>
+                                <p><strong>Описание:</strong> <span th:text="${restaurant.description ?: 'Не указано'}">Описание</span></p>
+                                <p><strong>Телефон:</strong> <span th:text="${restaurant.phone ?: 'Не указано'}">Телефон</span></p>
+                                <p><strong>Email:</strong> <span th:text="${restaurant.email ?: 'Не указано'}">Email</span></p>
+                                <p><strong>Сайт:</strong> <span th:text="${restaurant.website ?: 'Не указано'}">Сайт</span></p>
                             </div>
                             <div class="col-md-6">
                                 <h5>ℹ️ Дополнительная информация</h5>
