@@ -178,7 +178,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     }
 
     @Test
-    void delete_whenRestaurantDoNotFind_thenDelete() {
+    void delete_whenRestaurantFind_thenDelete() {
 
         Restaurant restaurant = createRestaurant(DEFAULT_RESTAURANT_NAME);
         UUID id = restaurant.id();
@@ -231,6 +231,8 @@ public class RestaurantServiceTest extends TestContainerInitialization {
         Assertions.assertTrue(restaurantRepository.existsByName("FoodCore"));
 
     }
+
+
 
     private Stream<Arguments> createValidData() {
         return Stream.of(

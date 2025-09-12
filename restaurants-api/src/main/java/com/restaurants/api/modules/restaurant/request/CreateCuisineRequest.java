@@ -24,4 +24,5 @@ public class CreateCuisineRequest {
     @JsonProperty("description")
     private String description;
 
+
 }

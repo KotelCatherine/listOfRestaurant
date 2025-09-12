@@ -123,7 +123,7 @@ public class RestaurantService {
 
     }
 
-    public List<CuisineDto> findAllCuisines(UUID restaurantId) throws RestaurantException {
+    public List<CuisineDto> findAllCuisines(UUID restaurantId) {
 
         List<RestaurantCuisines> restaurantCuisines = restaurantCuisinesRepository.findAllByRestaurantId(restaurantId);
 
@@ -162,13 +162,13 @@ public class RestaurantService {
 
         List<RestaurantCuisines> allByCuisineId = restaurantCuisinesRepository.findAllByCuisineId(cuisineId);
 
-        if (allByCuisineId.isEmpty()){
+        if (allByCuisineId.isEmpty()) {
             return List.of();
         }
 
         List<RestaurantDto> restaurants = new ArrayList<>();
 
-        for (RestaurantCuisines restaurantCuisines: allByCuisineId) {
+        for (RestaurantCuisines restaurantCuisines : allByCuisineId) {
 
             UUID restaurantId = restaurantCuisines.restaurantId();
             Restaurant restaurant = restaurantRepository.findById(restaurantId)
