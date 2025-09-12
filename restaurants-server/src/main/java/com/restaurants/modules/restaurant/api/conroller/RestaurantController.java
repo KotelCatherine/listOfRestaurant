@@ -14,7 +14,6 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,55 +37,41 @@ public class RestaurantController implements RestaurantResource {
 
     @Override
     @PostMapping
-    public ResponseEntity<RestaurantDto> create(@RequestBody @Valid CreateRestaurantRequest request) throws RestaurantException {
-
-        RestaurantDto restaurantDto = restaurantService.create(request);
-
-        return ResponseEntity.ok(restaurantDto);
-
+    public RestaurantDto create(@RequestBody @Valid CreateRestaurantRequest request) throws RestaurantException {
+        return restaurantService.create(request);
     }
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<FindRestaurantDto> findRestaurant(@PathVariable UUID id) throws RestaurantException {
-
-        FindRestaurantDto restaurantDto = restaurantService.findById(id);
-
-        return ResponseEntity.ok(restaurantDto);
-
+    public FindRestaurantDto findRestaurant(@PathVariable UUID id) throws RestaurantException {
+        return restaurantService.findById(id);
     }
 
     @Override
     @GetMapping
-    public ResponseEntity<Page<RestaurantDto>> getAllRestaurants(@ParameterObject Pageable pageable) {
-        return ResponseEntity.ok(restaurantService.getAllRestaurants(pageable));
+    public Page<RestaurantDto> getAllRestaurants(@ParameterObject Pageable pageable) {
+        return restaurantService.getAllRestaurants(pageable);
     }
 
     @Override
     @GetMapping("/search")
-    public ResponseEntity<List<RestaurantDto>> searchRestaurantsByName(
+    public List<RestaurantDto> searchRestaurantsByName(
             @RequestParam String nameQuery) {
-        List<RestaurantDto> restaurants = restaurantService.searchRestaurantsByName(nameQuery);
-        return ResponseEntity.ok(restaurants);
+        return restaurantService.searchRestaurantsByName(nameQuery);
     }
 
     @Override
     @PostMapping("/{id}")
-    public ResponseEntity<RestaurantDto> update(
+    public RestaurantDto update(
             @PathVariable UUID id,
             @RequestBody UpdateRestaurantRequest request) throws RestaurantException {
-        RestaurantDto updatedRestaurant = restaurantService.update(id, request);
-        return ResponseEntity.ok(updatedRestaurant);
+        return restaurantService.update(id, request);
     }
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) throws RestaurantException {
-
+    public void delete(@PathVariable UUID id) throws RestaurantException {
         restaurantService.delete(id);
-
-        return ResponseEntity.ok().build();
-
     }
 
     @Override

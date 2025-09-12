@@ -12,7 +12,6 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,37 +28,25 @@ public class CuisinesController implements CuisineResource {
 
     @Override
     @GetMapping("/cuisines")
-    public ResponseEntity<Page<CuisineDto>> getAllCuisines(@ParameterObject Pageable pageable) {
-
-        Page<CuisineDto> allCuisines = cuisineService.getAllCuisines(pageable);
-
-        return ResponseEntity.ok(allCuisines);
-
+    public Page<CuisineDto> getAllCuisines(@ParameterObject Pageable pageable) {
+        return cuisineService.getAllCuisines(pageable);
     }
 
     @Override
     @PostMapping
-    public ResponseEntity<CuisineDto> createCuisine(@Valid @RequestBody CreateCuisineRequest request) throws CuisineException {
-
-        CuisineDto cuisine = cuisineService.createCuisine(request);
-
-        return ResponseEntity.ok(cuisine);
-
+    public CuisineDto createCuisine(@Valid @RequestBody CreateCuisineRequest request) throws CuisineException {
+        return cuisineService.createCuisine(request);
     }
 
     @Override
-    public ResponseEntity<CuisineDto> updateCuisine(@Valid @RequestBody UpdateCuisineRequest request) {
-
-        CuisineDto cuisineDto = cuisineService.updateCuisine(request);
-
-        return ResponseEntity.ok(cuisineDto);
-
+    public CuisineDto updateCuisine(@Valid @RequestBody UpdateCuisineRequest request) {
+        return cuisineService.updateCuisine(request);
     }
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCuisine(@PathVariable UUID id) {
-        return ResponseEntity.ok().build();
+    public void deleteCuisine(@PathVariable UUID id) {
+
     }
 
 }

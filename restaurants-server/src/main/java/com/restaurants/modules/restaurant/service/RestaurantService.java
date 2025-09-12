@@ -115,19 +115,11 @@ public class RestaurantService {
 
     }
 
-    private void checkName(String name) throws RestaurantException {
-
-        if (restaurantRepository.existsByNameIgnoreCase(name)) {
-            throw new RestaurantException(RestaurantErrorCodeEnum.RESTAURANT_NAME_ALREADY_EXISTS);
-        }
-
-    }
-
-    public List<CuisineDto> findAllCuisines(UUID restaurantId) {
+    public List<CuisineDto> findAllCuisines(UUID restaurantId) throws RestaurantException {
 
         List<RestaurantCuisines> restaurantCuisines = restaurantCuisinesRepository.findAllByRestaurantId(restaurantId);
 
-        return restaurantCuisines.stream()
+  /*      return restaurantCuisines.stream()
                 .map(rc -> {
                     try {
                         Cuisine cuisine = cuisinesRepository.findById(rc.id())
@@ -139,8 +131,8 @@ public class RestaurantService {
                 })
                 .toList();
 
-
-        /*List<CuisineDto> result = new ArrayList<>();
+*/
+        List<CuisineDto> result = new ArrayList<>();
 
         for (RestaurantCuisines cuisines: restaurantCuisines) {
 
@@ -151,7 +143,8 @@ public class RestaurantService {
             CuisineDto cuisineDto = restaurantMapper.mapToCuisineDto(cuisine);
             result.add(cuisineDto);
 
-        }*/
+        }
+        return result;
 
     }
 
@@ -179,6 +172,14 @@ public class RestaurantService {
         }
 
         return restaurants;
+
+    }
+
+    private void checkName(String name) throws RestaurantException {
+
+        if (restaurantRepository.existsByNameIgnoreCase(name)) {
+            throw new RestaurantException(RestaurantErrorCodeEnum.RESTAURANT_NAME_ALREADY_EXISTS);
+        }
 
     }
 

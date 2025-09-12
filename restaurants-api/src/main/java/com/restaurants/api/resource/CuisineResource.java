@@ -11,7 +11,6 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -27,18 +26,18 @@ public interface CuisineResource {
 
     @GetMapping("/cuisines")
     @Operation(operationId = "getAllCuisines", summary = "Получить все типы кухонь")
-    ResponseEntity<Page<CuisineDto>> getAllCuisines(@ParameterObject Pageable pageable);
+    Page<CuisineDto> getAllCuisines(@ParameterObject Pageable pageable);
 
     @PostMapping
     @Operation(operationId = "addCuisine", summary = "Добавить кухню")
-    ResponseEntity<CuisineDto> createCuisine(@Valid @RequestBody CreateCuisineRequest request) throws CuisineException;
+    CuisineDto createCuisine(@Valid @RequestBody CreateCuisineRequest request) throws CuisineException;
 
     @PostMapping("/{id}")
     @Operation(operationId = "updateCuisine", summary = "Обновить кухню")
-    ResponseEntity<CuisineDto> updateCuisine(@Valid @RequestBody UpdateCuisineRequest request);
+    CuisineDto updateCuisine(@Valid @RequestBody UpdateCuisineRequest request);
 
     @DeleteMapping("/{id}")
     @Operation(operationId = "removeCuisine", summary = "Удалить кухню")
-    ResponseEntity<Void> deleteCuisine(@PathVariable UUID id);
+    void deleteCuisine(@PathVariable UUID id);
 
 }
