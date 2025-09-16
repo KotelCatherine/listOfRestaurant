@@ -232,8 +232,6 @@ public class RestaurantServiceTest extends TestContainerInitialization {
 
     }
 
-
-
     private Stream<Arguments> createValidData() {
         return Stream.of(
                 Arguments.of(DEFAULT_VALID_PHONE_NUMBER, DEFAULT_VALID_EMAIL),
@@ -253,4 +251,5 @@ public class RestaurantServiceTest extends TestContainerInitialization {
                 Arguments.of(DEFAULT_VALID_PHONE_NUMBER, "ya@guru")
         );
     }
+
 }
