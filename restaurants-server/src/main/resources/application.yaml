@@ -17,7 +17,6 @@ spring:
   web:
     resources:
       add-mappings: true
-      static-locations: classpath:/static/
 
   thymeleaf:
     cache: false

@@ -91,20 +91,6 @@ public class WebController {
         return "test-data";
     }
 
-    @GetMapping("/favicon.ico")
-    public String favicon() {
-        return "forward:/static/favicon.ico";
-    }
-
-    @GetMapping("/css/style.css")
-    public String css() {
-        return "forward:/static/css/style.css";
-    }
-
-    @GetMapping("/js/app.js")
-    public String js() {
-        return "forward:/static/js/app.js";
-    }
 
     @GetMapping("/test")
     public String test() {
