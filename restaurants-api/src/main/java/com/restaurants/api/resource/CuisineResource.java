@@ -34,7 +34,7 @@ public interface CuisineResource {
 
     @PostMapping("/{id}")
     @Operation(operationId = "updateCuisine", summary = "Обновить кухню")
-    CuisineDto updateCuisine(@Valid @RequestBody UpdateCuisineRequest request);
+    CuisineDto updateCuisine(@PathVariable UUID id, @Valid @RequestBody UpdateCuisineRequest request);
 
     @DeleteMapping("/{id}")
     @Operation(operationId = "removeCuisine", summary = "Удалить кухню")

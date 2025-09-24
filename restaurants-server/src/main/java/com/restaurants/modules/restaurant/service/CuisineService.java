@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.UUID;
+
 @Slf4j
 @Validated
 @Transactional(readOnly = true)
@@ -66,7 +68,7 @@ public class CuisineService {
 
     }
 
-    public CuisineDto updateCuisine(@Valid UpdateCuisineRequest request) {
+    public CuisineDto updateCuisine(UUID cuisineId,  @Valid UpdateCuisineRequest request) {
         return null;
     }
 }

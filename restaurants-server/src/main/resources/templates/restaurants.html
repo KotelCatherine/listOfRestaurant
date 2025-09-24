@@ -8,77 +8,109 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">🍽️ Рестораны</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="/restaurants">Все рестораны</a>
-                <a class="nav-link" href="/test-data">Тестовые данные</a>
-                <a class="nav-link" href="/swagger-ui.html" target="_blank">API Docs</a>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">🍽️ Рестораны</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="/restaurants">Все рестораны</a>
+            <a class="nav-link" href="/test-data">Тестовые данные</a>
+            <a class="nav-link" href="/swagger-ui.html" target="_blank">API Docs</a>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <main class="container mt-4">
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <h1>🍽️ Список ресторанов</h1>
-            </div>
-            <div class="col-md-4">
-                <form th:action="@{/search}" method="get" class="d-flex">
-                    <input type="text" name="nameQuery" class="form-control me-2" placeholder="Поиск по названию...">
-                    <button type="submit" class="btn btn-outline-primary">Поиск</button>
-                </form>
-            </div>
+<main class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>🍽️ Список ресторанов</h1>
         </div>
-
-        <div th:if="${restaurants.empty}" class="alert alert-info">
-            <h4>Рестораны не найдены</h4>
-            <p>В системе пока нет ресторанов. Добавьте их через API.</p>
+        <div class="col-md-4">
+            <form th:action="@{/search}" method="get" class="d-flex">
+                <input type="text" name="nameQuery" class="form-control me-2" placeholder="Поиск по названию...">
+                <button type="submit" class="btn btn-outline-primary">Поиск</button>
+            </form>
         </div>
+    </div>
 
-        <div th:unless="${restaurants.empty}" class="row">
-            <div th:each="restaurant : ${restaurants}" class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${restaurant.name}">Название ресторана</h5>
-                        <p class="card-text">
-                            <strong>Описание:</strong> <span th:text="${restaurant.description}">Описание</span><br>
-                            <strong>Телефон:</strong> <span th:text="${restaurant.phone}">Телефон</span><br>
-                            <strong>Email:</strong> <span th:text="${restaurant.email}">Email</span><br>
-                            <strong>Сайт:</strong> <span th:text="${restaurant.website}">Сайт</span>
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <a th:href="@{/restaurants/{id}(id=${restaurant.id})}" class="btn btn-primary">
-                            Подробнее
-                        </a>
-                    </div>
+    <div th:if="${restaurants.empty}" class="alert alert-info">
+        <h4>Рестораны не найдены</h4>
+        <p>В системе пока нет ресторанов. Добавьте их через API.</p>
+    </div>
+
+    <div th:unless="${restaurants.empty}" class="row">
+        <div th:each="restaurant : ${restaurants}" class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${restaurant.name}">Название ресторана</h5>
+                    <p class="card-text">
+                        <strong>Описание:</strong> <span th:text="${restaurant.description}">Описание</span><br>
+                        <strong>Телефон:</strong> <span th:text="${restaurant.phone}">Телефон</span><br>
+                        <strong>Email:</strong> <span th:text="${restaurant.email}">Email</span><br>
+                        <strong>Сайт:</strong> <span th:text="${restaurant.website}">Сайт</span>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a th:href="@{/restaurants/{id}(id=${restaurant.id})}" class="btn btn-primary">
+                        Подробнее
+                    </a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Простая пагинация -->
-        <div th:if="${totalPages > 1}" class="text-center">
-            <p class="text-muted">
-                Страница <span th:text="${currentPage + 1}">1</span> из <span th:text="${totalPages}">1</span>
-            </p>
-        </div>
 
-        <div class="mt-4">
-            <p class="text-muted">
-                Показано <span th:text="${restaurants.size()}">0</span> из <span th:text="${totalElements}">0</span> ресторанов
-            </p>
-        </div>
-    </main>
+    <!-- Улучшенная пагинация -->
+    <div th:if="${totalPages > 1}" class="d-flex justify-content-center mt-4">
+        <nav aria-label="Навигация по страницам">
+            <ul class="pagination">
+                <!-- Кнопка "Назад" -->
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a th:if="${currentPage > 0}"
+                       class="page-link"
+                       th:href="@{/restaurants(page=${currentPage - 1}, size=${pageSize})}">
+                        &laquo; Назад
+                    </a>
+                    <span th:unless="${currentPage > 0}" class="page-link">&laquo; Назад</span>
+                </li>
 
-    <footer class="bg-light text-center text-muted py-3 mt-5">
-        <div class="container">
-            <p>&copy; 2024 Система управления ресторанами</p>
-        </div>
-    </footer>
+                <!-- Номера страниц -->
+                <li th:each="page : ${#numbers.sequence(0, totalPages - 1)}"
+                    class="page-item"
+                    th:classappend="${page == currentPage} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{/restaurants(page=${page}, size=${pageSize})}"
+                       th:text="${page + 1}">1</a>
+                </li>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/app.js"></script>
+                <!-- Кнопка "Вперед" -->
+                <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                    <a th:if="${currentPage < totalPages - 1}"
+                       class="page-link"
+                       th:href="@{/restaurants(page=${currentPage + 1}, size=${pageSize})}">
+                        Вперед &raquo;
+                    </a>
+                    <span th:unless="${currentPage < totalPages - 1}" class="page-link">Вперед &raquo;</span>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="mt-4 text-center">
+        <p class="text-muted">
+            Страница <span th:text="${currentPage + 1}">1</span> из <span th:text="${totalPages}">1</span> |
+            Показано <span th:text="${restaurants.size()}">0</span> из <span th:text="${totalElements}">0</span>
+            ресторанов
+        </p>
+    </div>
+</main>
+
+<footer class="bg-light text-center text-muted py-3 mt-5">
+    <div class="container">
+        <p>&copy; 2024 Система управления ресторанами</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/app.js"></script>
 </body>
 </html>

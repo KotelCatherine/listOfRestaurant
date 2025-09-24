@@ -62,6 +62,10 @@ public class WebController {
             RestaurantDto restaurantDto = new RestaurantDto();
             restaurantDto.id(id);
             restaurantDto.name(restaurant.name());
+            restaurantDto.description(restaurant.description());
+            restaurantDto.phone(restaurant.phone());
+            restaurantDto.email(restaurant.email());
+            restaurantDto.website(restaurant.website());
             // Остальные поля будут null, но это не критично для отображения
             
             model.addAttribute("restaurant", restaurantDto);
@@ -104,7 +108,7 @@ public class WebController {
         testRestaurant.id(UUID.randomUUID());
         testRestaurant.name("Тестовый ресторан");
         testRestaurant.description("Описание тестового ресторана");
-        testRestaurant.phone("+7 (495) 123-45-67");
+        testRestaurant.phone("+74951234567");
         testRestaurant.email("test@restaurant.ru");
         testRestaurant.website("https://test.ru");
         

@@ -14,11 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.UUID;
 
-@RequestMapping(value = "cuisine", method = {RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.GET})
+@RequestMapping(value = "cuisine")
 @RestController
 @RequiredArgsConstructor
 @Validated
@@ -28,7 +27,7 @@ public class CuisinesController implements CuisineResource {
     private CuisineService cuisineService;
 
     @Override
-    @GetMapping("/cuisines")
+    @GetMapping
     public Page<CuisineDto> getAllCuisines(@ParameterObject Pageable pageable) {
         return cuisineService.getAllCuisines(pageable);
     }
@@ -40,8 +39,9 @@ public class CuisinesController implements CuisineResource {
     }
 
     @Override
-    public CuisineDto updateCuisine(@Valid @RequestBody UpdateCuisineRequest request) {
-        return cuisineService.updateCuisine(request);
+    @PutMapping("/{id}/update")
+    public CuisineDto updateCuisine(@PathVariable UUID id, @Valid @RequestBody UpdateCuisineRequest request) {
+        return cuisineService.updateCuisine(id, request);
     }
 
     @Override

@@ -53,7 +53,11 @@ public class RestaurantMapper {
 
     public FindRestaurantDto mapToFindRestaurantDto(Restaurant restaurant) {
         return new FindRestaurantDto()
-                .name(restaurant.name());
+                .name(restaurant.name())
+                .description(restaurant.description())
+                .phone(restaurant.phone())
+                .email(restaurant.email())
+                .website(restaurant.website());
     }
 
     public RestaurantDto mapToRestaurantDto(Restaurant restaurant) {

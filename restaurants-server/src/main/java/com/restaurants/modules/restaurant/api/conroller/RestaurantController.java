@@ -28,10 +28,9 @@ import java.util.UUID;
 он должен будет создавать новый объект Restaurant на основе данных из CreateRestaurantRequest,
 сохранять его через RestaurantService и возвращать объект RestaurantDto.*/
 
-@RequestMapping(value = "restaurant", method = {RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.GET})
+@RequestMapping(value = "restaurant")
 @RestController
 @RequiredArgsConstructor
-@Validated
 public class RestaurantController implements RestaurantResource {
 
     @Autowired
@@ -39,7 +38,7 @@ public class RestaurantController implements RestaurantResource {
 
     @Override
     @PostMapping
-    public RestaurantDto create(@RequestBody @Valid CreateRestaurantRequest request) throws RestaurantException {
+    public RestaurantDto create(@Valid @RequestBody CreateRestaurantRequest request) throws RestaurantException {
         return restaurantService.create(request);
     }
 
@@ -63,7 +62,7 @@ public class RestaurantController implements RestaurantResource {
     }
 
     @Override
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/update")
     public RestaurantDto update(
             @PathVariable UUID id,
             @RequestBody UpdateRestaurantRequest request) throws RestaurantException {
@@ -83,6 +82,7 @@ public class RestaurantController implements RestaurantResource {
     }
 
     @Override
+    @GetMapping("/{id}/findAllRestaurant")
     public List<RestaurantDto> findAllRestaurantByCuisineId(UUID cuisineId) throws RestaurantException {
         return restaurantService.findAllRestaurants(cuisineId);
     }

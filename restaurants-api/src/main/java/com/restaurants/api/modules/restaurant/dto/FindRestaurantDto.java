@@ -19,5 +19,21 @@ public class FindRestaurantDto {
     @JsonProperty("name")
     private String name;
 
+    @Schema(description = "Описание ресторана")
+    @JsonProperty("description")
+    private String description;
+
+    @Schema(description = "Номер телефона ресторана")
+    @JsonProperty("phone")
+    private String phone;
+
+    @Schema(description = "Email почта")
+    @JsonProperty("email")
+    private String email;
+
+    @Schema(description = "Вебсайт ресторана")
+    @JsonProperty("website")
+    private String website;
+
 
 }
