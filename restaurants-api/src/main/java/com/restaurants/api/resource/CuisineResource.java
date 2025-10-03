@@ -2,8 +2,7 @@ package com.restaurants.api.resource;
 
 import com.restaurants.api.exception.CuisineException;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
-import com.restaurants.api.modules.restaurant.request.CreateCuisineRequest;
-import com.restaurants.api.modules.restaurant.request.UpdateCuisineRequest;
+import com.restaurants.api.modules.restaurant.request.CuisineRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -30,11 +29,11 @@ public interface CuisineResource {
 
     @PostMapping
     @Operation(operationId = "addCuisine", summary = "Добавить кухню")
-    CuisineDto createCuisine(@Valid @RequestBody CreateCuisineRequest request) throws CuisineException;
+    CuisineDto createCuisine(@Valid @RequestBody CuisineRequest request) throws CuisineException;
 
     @PostMapping("/{id}")
     @Operation(operationId = "updateCuisine", summary = "Обновить кухню")
-    CuisineDto updateCuisine(@PathVariable UUID id, @Valid @RequestBody UpdateCuisineRequest request);
+    CuisineDto updateCuisine(@PathVariable UUID id, @Valid @RequestBody CuisineRequest request) throws CuisineException;
 
     @DeleteMapping("/{id}")
     @Operation(operationId = "removeCuisine", summary = "Удалить кухню")

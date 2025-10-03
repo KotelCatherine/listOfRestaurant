@@ -3,7 +3,7 @@ package com.restaurants.modules.restaurant.service;
 import com.restaurants.TestContainerInitialization;
 import com.restaurants.api.exception.CuisineErrorCodeEnum;
 import com.restaurants.api.exception.CuisineException;
-import com.restaurants.api.modules.restaurant.request.CreateCuisineRequest;
+import com.restaurants.api.modules.restaurant.request.CuisineRequest;
 import com.restaurants.modules.restaurant.entity.Cuisine;
 import com.restaurants.modules.restaurant.repository.CuisinesRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -35,7 +35,7 @@ class CuisineServiceTest extends TestContainerInitialization {
 
         createCuisine(DEFAULT_NAME_CUISINE);
 
-        CreateCuisineRequest request = getCreateCuisineRequest(DEFAULT_NAME_CUISINE);
+        CuisineRequest request = getCreateCuisineRequest(DEFAULT_NAME_CUISINE);
         CuisineException exception = Assertions.assertThrows(CuisineException.class, () -> service.createCuisine(request));
         Assertions.assertEquals(CuisineErrorCodeEnum.CUISINE_NAME_ALREADY_EXISTS.errorCode(), exception.errorCode());
 
@@ -46,14 +46,14 @@ class CuisineServiceTest extends TestContainerInitialization {
 
         createCuisine(DEFAULT_NAME_CUISINE);
 
-        CreateCuisineRequest request = getCreateCuisineRequest("Белорусская");
+        CuisineRequest request = getCreateCuisineRequest("Белорусская");
 
         Assertions.assertDoesNotThrow(() -> service.createCuisine(request));
 
     }
 
-    private CreateCuisineRequest getCreateCuisineRequest(String name) {
-        return new CreateCuisineRequest()
+    private CuisineRequest getCreateCuisineRequest(String name) {
+        return new CuisineRequest()
                 .name(name);
     }
 

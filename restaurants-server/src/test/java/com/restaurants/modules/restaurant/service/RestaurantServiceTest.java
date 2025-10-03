@@ -3,7 +3,6 @@ package com.restaurants.modules.restaurant.service;
 import com.restaurants.TestContainerInitialization;
 import com.restaurants.api.exception.RestaurantErrorCodeEnum;
 import com.restaurants.api.exception.RestaurantException;
-import com.restaurants.api.modules.restaurant.dto.FindRestaurantDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
@@ -94,7 +93,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
 
         Restaurant restaurant = createRestaurant(DEFAULT_RESTAURANT_NAME);
 
-        FindRestaurantDto result = Assertions.assertDoesNotThrow(() -> restaurantService.findById(restaurant.id()));
+        RestaurantDto result = Assertions.assertDoesNotThrow(() -> restaurantService.findById(restaurant.id()));
 
         Assertions.assertEquals(restaurant.name(), result.name());
 

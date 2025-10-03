@@ -1,7 +1,7 @@
 package com.restaurants.modules.restaurant.mapper;
 
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
-import com.restaurants.api.modules.restaurant.request.CreateCuisineRequest;
+import com.restaurants.api.modules.restaurant.request.CuisineRequest;
 import com.restaurants.modules.restaurant.entity.Cuisine;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CuisineMapper {
 
-    public Cuisine mapToEntity(@Valid CreateCuisineRequest request) {
+    public Cuisine mapToEntity(@Valid CuisineRequest request) {
         return new Cuisine()
                 .id(UUID.randomUUID())
                 .versionId(BigInteger.ONE)
@@ -30,4 +30,9 @@ public class CuisineMapper {
                 .description(cuisine.description());
     }
 
+    public Cuisine mapToCuisine(@Valid CuisineRequest request, Cuisine cuisine) {
+        return cuisine
+                .name(request.name())
+                .description(request.description());
+    }
 }

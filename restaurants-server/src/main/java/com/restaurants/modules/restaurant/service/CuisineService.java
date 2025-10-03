@@ -3,8 +3,7 @@ package com.restaurants.modules.restaurant.service;
 import com.restaurants.api.exception.CuisineErrorCodeEnum;
 import com.restaurants.api.exception.CuisineException;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
-import com.restaurants.api.modules.restaurant.request.CreateCuisineRequest;
-import com.restaurants.api.modules.restaurant.request.UpdateCuisineRequest;
+import com.restaurants.api.modules.restaurant.request.CuisineRequest;
 import com.restaurants.modules.restaurant.entity.Cuisine;
 import com.restaurants.modules.restaurant.mapper.CuisineMapper;
 import com.restaurants.modules.restaurant.repository.CuisinesRepository;
@@ -12,7 +11,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,14 +27,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CuisineService {
 
-    @Autowired
     private final CuisinesRepository repository;
-
-    @Autowired
     private final CuisineMapper mapper;
 
     @Transactional
-    public CuisineDto createCuisine(@Valid CreateCuisineRequest request) throws CuisineException {
+    public CuisineDto createCuisine(@Valid CuisineRequest request) throws CuisineException {
 
         chekName(request.name());
         Cuisine cuisine = mapper.mapToEntity(request);
@@ -60,6 +55,19 @@ public class CuisineService {
 
     }
 
+    public CuisineDto updateCuisine(UUID cuisineId, @Valid CuisineRequest request) throws CuisineException {
+
+        Cuisine cuisine = repository.findById(cuisineId)
+                .orElseThrow(() -> new CuisineException(CuisineErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
+
+        cuisine = mapper.mapToCuisine(request, cuisine);
+
+        repository.saveAndFlush(cuisine);
+
+        return mapper.mapToCuisineDto(cuisine);
+
+    }
+
     private void chekName(@NotBlank String name) throws CuisineException {
 
         if (repository.existsByNameIgnoreCase(name)) {
@@ -68,7 +76,4 @@ public class CuisineService {
 
     }
 
-    public CuisineDto updateCuisine(UUID cuisineId,  @Valid UpdateCuisineRequest request) {
-        return null;
-    }
 }

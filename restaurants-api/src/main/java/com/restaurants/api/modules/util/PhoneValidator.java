@@ -12,9 +12,7 @@ public class PhoneValidator implements ConstraintValidator<PhoneValidation, Stri
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
 
         if (value == null || value.isBlank()) {
-
             return true;
-
         }
 
         String trimmedValue = value.trim();

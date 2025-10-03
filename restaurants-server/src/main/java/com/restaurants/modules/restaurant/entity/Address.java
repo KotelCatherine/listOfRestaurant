@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -11,6 +12,7 @@ import lombok.experimental.Accessors;
 import java.util.UUID;
 
 @Entity(name = "addresses")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -35,12 +37,6 @@ public class Address {
 
     @Column(name = "building")
     private String building;
-
-    @Column(name = "apartment")
-    private String apartment;
-
-    @Column(name = "postal_code")
-    private String postalCode;
 
     @Column(name = "latitude")
     private double latitude;

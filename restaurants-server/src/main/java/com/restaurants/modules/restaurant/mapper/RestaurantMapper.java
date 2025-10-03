@@ -1,7 +1,6 @@
 package com.restaurants.modules.restaurant.mapper;
 
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
-import com.restaurants.api.modules.restaurant.dto.FindRestaurantDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
@@ -51,21 +50,13 @@ public class RestaurantMapper {
                 .createdBy("system");
     }
 
-    public FindRestaurantDto mapToFindRestaurantDto(Restaurant restaurant) {
-        return new FindRestaurantDto()
-                .name(restaurant.name())
-                .description(restaurant.description())
-                .phone(restaurant.phone())
-                .email(restaurant.email())
-                .website(restaurant.website());
-    }
-
     public RestaurantDto mapToRestaurantDto(Restaurant restaurant) {
         return new RestaurantDto()
                 .id(restaurant.id())
                 .name(restaurant.name())
                 .phone(restaurant.phone())
-                .email(restaurant.email());
+                .email(restaurant.email())
+                .website(restaurant.website());
     }
 
     public CuisineDto mapToCuisineDto(Cuisine cuisine) {

@@ -44,9 +44,7 @@ public class EmailValidator implements ConstraintValidator<EmailValidation, Stri
         // Если требуется обязательное поле, используйте @NotNull или @NotBlank отдельно.
 
         if (value == null || value.isBlank()) {
-
             return true;
-
         }
 
         // Проверка соответствия регулярному выражению

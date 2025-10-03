@@ -1,18 +1,22 @@
 package com.restaurants.modules.restaurant.service;
 
+import com.restaurants.api.exception.CuisineErrorCodeEnum;
+import com.restaurants.api.exception.CuisineException;
 import com.restaurants.api.exception.RestaurantErrorCodeEnum;
 import com.restaurants.api.exception.RestaurantException;
+import com.restaurants.api.modules.restaurant.dto.AddressDto;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
-import com.restaurants.api.modules.restaurant.dto.FindRestaurantDto;
+import com.restaurants.api.modules.restaurant.dto.MenuCategoryDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
+import com.restaurants.api.modules.restaurant.request.AddressRequest;
 import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
+import com.restaurants.api.modules.restaurant.request.MenuCategoryRequest;
 import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
-import com.restaurants.modules.restaurant.entity.Restaurant;
-import com.restaurants.modules.restaurant.entity.RestaurantCuisines;
+import com.restaurants.modules.restaurant.entity.*;
+import com.restaurants.modules.restaurant.mapper.AddressMapper;
+import com.restaurants.modules.restaurant.mapper.MenuCategoryMapper;
 import com.restaurants.modules.restaurant.mapper.RestaurantMapper;
-import com.restaurants.modules.restaurant.repository.CuisinesRepository;
-import com.restaurants.modules.restaurant.repository.RestaurantCuisinesRepository;
-import com.restaurants.modules.restaurant.repository.RestaurantRepository;
+import com.restaurants.modules.restaurant.repository.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +42,12 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final RestaurantCuisinesRepository restaurantCuisinesRepository;
     private final CuisinesRepository cuisinesRepository;
+    private final AddressRepository addressRepository;
+    private final MenuCategoryRepository menuCategoryRepository;
 
     private final RestaurantMapper restaurantMapper;
+    private final AddressMapper addressMapper;
+    private final MenuCategoryMapper menuCategoryMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public RestaurantDto create(@Valid CreateRestaurantRequest request) throws RestaurantException {
@@ -52,12 +60,12 @@ public class RestaurantService {
 
     }
 
-    public FindRestaurantDto findById(UUID id) throws RestaurantException {
+    public RestaurantDto findById(UUID id) throws RestaurantException {
 
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID));
 
-        return restaurantMapper.mapToFindRestaurantDto(restaurant);
+        return restaurantMapper.mapToRestaurantDto(restaurant);
 
     }
 
@@ -78,9 +86,7 @@ public class RestaurantService {
     @Transactional
     public void delete(UUID id) throws RestaurantException {
 
-        if (!restaurantRepository.existsById(id)) {
-            throw new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID);
-        }
+        extracted(id);
 
         restaurantRepository.deleteById(id);
 
@@ -115,14 +121,6 @@ public class RestaurantService {
 
     }
 
-    private void checkName(String name) throws RestaurantException {
-
-        if (restaurantRepository.existsByNameIgnoreCase(name)) {
-            throw new RestaurantException(RestaurantErrorCodeEnum.RESTAURANT_NAME_ALREADY_EXISTS);
-        }
-
-    }
-
     public List<CuisineDto> findAllCuisines(UUID restaurantId) throws RestaurantException {
 
         List<RestaurantCuisines> restaurantCuisines = restaurantCuisinesRepository.findAllByRestaurantId(restaurantId);
@@ -138,8 +136,9 @@ public class RestaurantService {
 
     public List<RestaurantDto> findAllRestaurants(UUID cuisineId) throws RestaurantException {
 
-        cuisinesRepository.findById(cuisineId)
-                .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
+        if (!cuisinesRepository.existsById(cuisineId)) {
+            throw new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID);
+        }
 
         List<RestaurantCuisines> allByCuisineId = restaurantCuisinesRepository.findAllByCuisineId(cuisineId);
 
@@ -160,6 +159,65 @@ public class RestaurantService {
         }
 
         return restaurants;
+
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public CuisineDto createRestaurantCuisine(UUID restaurantId, UUID cuisineId) throws RestaurantException, CuisineException {
+
+        extracted(restaurantId);
+
+        Cuisine cuisine = cuisinesRepository.findById(cuisineId)
+                .orElseThrow(() -> new CuisineException(CuisineErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
+
+        RestaurantCuisines restaurantCuisines = new RestaurantCuisines()
+                .id(UUID.randomUUID())
+                .restaurantId(restaurantId)
+                .cuisineId(cuisineId);
+
+        restaurantCuisinesRepository.saveAndFlush(restaurantCuisines);
+
+        return restaurantMapper.mapToCuisineDto(cuisine);
+
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public AddressDto createAddress(UUID restaurantId, @Valid AddressRequest request) throws RestaurantException {
+
+        extracted(restaurantId);
+
+        Address address = addressMapper.mapToEntity(restaurantId, request);
+
+        addressRepository.saveAndFlush(address);
+
+        return addressMapper.mapToAddressDto(address);
+
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public MenuCategoryDto createMenuCategory(UUID restaurantId, @Valid MenuCategoryRequest request) throws RestaurantException {
+
+        extracted(restaurantId);
+
+        MenuCategory menuCategory = menuCategoryMapper.mapToEntity(restaurantId, request);
+
+        menuCategoryRepository.saveAndFlush(menuCategory);
+
+        return menuCategoryMapper.mapToMenuCategoryDto(menuCategory);
+
+    }
+
+    private void extracted(UUID restaurantId) throws RestaurantException {
+        if (!restaurantRepository.existsById(restaurantId)) {
+            throw new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID);
+        }
+    }
+
+    private void checkName(String name) throws RestaurantException {
+
+        if (restaurantRepository.existsByNameIgnoreCase(name)) {
+            throw new RestaurantException(RestaurantErrorCodeEnum.RESTAURANT_NAME_ALREADY_EXISTS);
+        }
 
     }
 

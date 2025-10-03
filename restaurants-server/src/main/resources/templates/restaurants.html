@@ -11,10 +11,20 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="/">🍽️ Рестораны</a>
-        <div class="navbar-nav">
-            <a class="nav-link" href="/restaurants">Все рестораны</a>
-            <a class="nav-link" href="/test-data">Тестовые данные</a>
-            <a class="nav-link" href="/swagger-ui.html" target="_blank">API Docs</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav me-auto">
+                <a class="nav-link" href="/restaurants">Все рестораны</a>
+                <a class="nav-link" href="/test-data">Тестовые данные</a>
+                <a class="nav-link" href="/swagger-ui.html" target="_blank">API Docs</a>
+            </div>
+            <div class="navbar-nav">
+                <a class="nav-link btn btn-success btn-sm text-white" href="/create-restaurant">
+                    ➕ Создать ресторан
+                </a>
+            </div>
         </div>
     </div>
 </nav>

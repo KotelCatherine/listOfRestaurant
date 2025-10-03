@@ -7,29 +7,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.math.BigInteger;
 import java.util.UUID;
 
-@Schema(description = "Данные о кухне ресторана")
+@Schema(description = "Данные о категории меню")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(fluent = true)
-public class CuisineDto {
+public class MenuCategoryDto {
 
-    @Schema(description = "Идентификатор кухни")
+    @Schema(description = "Идентификатор категории")
     @JsonProperty("id")
     private UUID id;
 
-    @Schema(description = "Идентификатор версии кухни")
-    @JsonProperty("version_id")
-    private BigInteger versionId;
+    @Schema(description = "Идентификатор ресторана")
+    @JsonProperty("restaurantId")
+    private UUID restaurantId;
 
-    @Schema(description = "Название кухни")
+    @Schema(description = "Название категории")
     @JsonProperty("name")
     private String name;
 
-    @Schema(description = "Описание кухни")
+    @Schema(description = "Описание")
     @JsonProperty("description")
     private String description;
 

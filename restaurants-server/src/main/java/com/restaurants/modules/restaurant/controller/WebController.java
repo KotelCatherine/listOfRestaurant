@@ -52,23 +52,13 @@ public class WebController {
     }
 
     @GetMapping("/restaurants/{id}")
-    public String restaurantDetails(@PathVariable UUID id, Model model) throws RestaurantException {
+    public String restaurantDetails(@PathVariable UUID id, Model model) {
         try {
             // Получаем полную информацию о ресторане через API
-            var restaurant = restaurantService.findById(id);
+            RestaurantDto restaurant = restaurantService.findById(id);
             List<CuisineDto> cuisines = restaurantService.findAllCuisines(id);
             
-            // Создаем RestaurantDto из FindRestaurantDto для совместимости с шаблоном
-            RestaurantDto restaurantDto = new RestaurantDto();
-            restaurantDto.id(id);
-            restaurantDto.name(restaurant.name());
-            restaurantDto.description(restaurant.description());
-            restaurantDto.phone(restaurant.phone());
-            restaurantDto.email(restaurant.email());
-            restaurantDto.website(restaurant.website());
-            // Остальные поля будут null, но это не критично для отображения
-            
-            model.addAttribute("restaurant", restaurantDto);
+            model.addAttribute("restaurant", restaurant);
             model.addAttribute("cuisines", cuisines);
             
             return "restaurant-details";
@@ -103,6 +93,7 @@ public class WebController {
 
     @GetMapping("/debug")
     public String debug(Model model) {
+
         // Создаем тестовые данные для отладки
         RestaurantDto testRestaurant = new RestaurantDto();
         testRestaurant.id(UUID.randomUUID());
@@ -121,5 +112,12 @@ public class WebController {
         model.addAttribute("cuisines", List.of(testCuisine));
         
         return "debug";
+
     }
+
+    @GetMapping("/create-restaurant")
+    public String createRestaurantPage() {
+        return "create-restaurant"; // имя вашего HTML файла без расширения
+    }
+
 }
