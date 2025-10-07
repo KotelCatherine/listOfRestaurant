@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Schema(description = "Запрос на создание/обновление расписания ресторана")
 @Data
@@ -15,6 +16,10 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Accessors(fluent = true)
 public class RestaurantScheduleRequest {
+
+    @Schema(description = "Идентификатор ресторана")
+    @JsonProperty("restaurantId")
+    private UUID restaurantId;
 
     @Schema(description = "Числовое представление дня недели")
     @JsonProperty("dayOfWeek")
