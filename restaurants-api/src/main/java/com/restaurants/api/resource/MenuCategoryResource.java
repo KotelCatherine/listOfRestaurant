@@ -6,22 +6,16 @@ import com.restaurants.api.modules.restaurant.request.MenuCategoryRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@FeignClient(
-        name = "menuCategory-client",
-        path = "/menuCategory",
-        url = "${app.menuCategory.url}"
-)
 @Tag(name = "MenuCategory", description = "Категория меню")
 public interface MenuCategoryResource {
 
-    @PostMapping("/{id}")
-    @Operation(operationId = "updatedMenuCategoryUsingPost", summary = "Обновление категории меню")
+    @PutMapping("/{id}")
+    @Operation(operationId = "updatedMenuCategoryUsingPut", summary = "Обновление категории меню")
     @ResponseStatus(HttpStatus.CREATED)
     MenuCategoryDto update(@PathVariable UUID id, @Valid @RequestBody MenuCategoryRequest request) throws MenuCategoryException;
 

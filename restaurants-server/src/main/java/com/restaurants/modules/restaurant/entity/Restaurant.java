@@ -9,9 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 
@@ -31,9 +28,6 @@ public class Restaurant {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "version_id")
-    private BigInteger versionId;
-
     @Column(name = "name")
     private String name;
 
@@ -51,14 +45,5 @@ public class Restaurant {
 
     @Column(name = "status")
     private String status;
-
-    @Column(name = "opening_date")
-    private Date openingDate;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "created_by")
-    private String createdBy;
 
 }

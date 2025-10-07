@@ -18,7 +18,7 @@ public class MenuCategoryController implements MenuCategoryResource {
     private final MenuCategoryService service;
 
     @Override
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public MenuCategoryDto update(@PathVariable UUID id, @RequestBody MenuCategoryRequest request) throws MenuCategoryException {
         return service.update(id, request);
     }

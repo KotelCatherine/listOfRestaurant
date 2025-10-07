@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
 import java.util.UUID;
 
 @Component
@@ -17,7 +16,6 @@ public class CuisineMapper {
     public Cuisine mapToEntity(@Valid CuisineRequest request) {
         return new Cuisine()
                 .id(UUID.randomUUID())
-                .versionId(BigInteger.ONE)
                 .name(request.name())
                 .description(request.description());
     }
@@ -25,7 +23,6 @@ public class CuisineMapper {
     public CuisineDto mapToCuisineDto(Cuisine cuisine) {
         return new CuisineDto()
                 .id(cuisine.id())
-                .versionId(cuisine.versionId())
                 .name(cuisine.name())
                 .description(cuisine.description());
     }
@@ -35,4 +32,5 @@ public class CuisineMapper {
                 .name(request.name())
                 .description(request.description());
     }
+
 }

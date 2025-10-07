@@ -7,36 +7,34 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-
-@FeignClient(
-        name = "cuisine-client",
-        path = "/cuisine",
-        url = "${app.cuisine.url}"
-)
 @Tag(name = "Cuisine", description = "Кухни")
 public interface CuisineResource {
 
     @GetMapping("/cuisines")
     @Operation(operationId = "getAllCuisines", summary = "Получить все типы кухонь")
+    @ResponseStatus(HttpStatus.OK)
     Page<CuisineDto> getAllCuisines(@ParameterObject Pageable pageable);
 
     @PostMapping
     @Operation(operationId = "addCuisine", summary = "Добавить кухню")
+    @ResponseStatus(HttpStatus.CREATED)
     CuisineDto createCuisine(@Valid @RequestBody CuisineRequest request) throws CuisineException;
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @Operation(operationId = "updateCuisine", summary = "Обновить кухню")
+    @ResponseStatus(HttpStatus.OK)
     CuisineDto updateCuisine(@PathVariable UUID id, @Valid @RequestBody CuisineRequest request) throws CuisineException;
 
     @DeleteMapping("/{id}")
     @Operation(operationId = "removeCuisine", summary = "Удалить кухню")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteCuisine(@PathVariable UUID id);
 
 }

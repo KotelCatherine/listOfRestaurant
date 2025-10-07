@@ -9,24 +9,34 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
+@Entity(name = "menu_items")
 @Data
-@Entity(name = "cuisines")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Accessors(fluent = true)
-public class Cuisine {
+public class MenuItem {
 
     @Id
     @Column(name = "id")
     private UUID id;
+
+    @Column(name = "menu_category_id")
+    private UUID menuCategoryId;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "price")
+    private BigDecimal price;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
 }

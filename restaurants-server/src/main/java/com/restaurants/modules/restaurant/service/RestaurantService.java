@@ -9,9 +9,8 @@ import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.dto.MenuCategoryDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.AddressRequest;
-import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
+import com.restaurants.api.modules.restaurant.request.RestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.MenuCategoryRequest;
-import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
 import com.restaurants.modules.restaurant.entity.*;
 import com.restaurants.modules.restaurant.mapper.AddressMapper;
 import com.restaurants.modules.restaurant.mapper.MenuCategoryMapper;
@@ -50,7 +49,7 @@ public class RestaurantService {
     private final MenuCategoryMapper menuCategoryMapper;
 
     @Transactional(rollbackFor = Exception.class)
-    public RestaurantDto create(@Valid CreateRestaurantRequest request) throws RestaurantException {
+    public RestaurantDto create(@Valid RestaurantRequest request) throws RestaurantException {
 
         checkName(request.name());
         Restaurant restaurant = restaurantMapper.mapToEntity(request);
@@ -70,7 +69,7 @@ public class RestaurantService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public RestaurantDto update(UUID id, @Valid UpdateRestaurantRequest request) throws RestaurantException {
+    public RestaurantDto update(UUID id, @Valid RestaurantRequest request) throws RestaurantException {
 
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID));
@@ -79,7 +78,7 @@ public class RestaurantService {
 
         restaurantRepository.saveAndFlush(restaurant);
 
-        return restaurantMapper.mapToDto(updatedRestaurant);
+        return restaurantMapper.mapToRestaurantDto(updatedRestaurant);
 
     }
 
@@ -104,7 +103,7 @@ public class RestaurantService {
         Page<Restaurant> restaurants = restaurantRepository.findAll(pageable);
 
         // ↓ 3. Проецируем сущности в DTO через маппер (MapStruct / ModelMapper — не принципиально)
-        return restaurants.map(restaurantMapper::mapToDto);    // restaurantMapper.toDto(Restaurant) → RestaurantDto
+        return restaurants.map(restaurantMapper::mapToRestaurantDto);    // restaurantMapper.toDto(Restaurant) → RestaurantDto
 
     }
 
@@ -121,7 +120,7 @@ public class RestaurantService {
 
     }
 
-    public List<CuisineDto> findAllCuisines(UUID restaurantId) throws RestaurantException {
+    public List<CuisineDto> findAllCuisines(UUID restaurantId) {
 
         List<RestaurantCuisines> restaurantCuisines = restaurantCuisinesRepository.findAllByRestaurantId(restaurantId);
 

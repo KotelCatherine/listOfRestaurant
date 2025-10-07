@@ -6,7 +6,6 @@ import com.restaurants.api.modules.restaurant.request.AddressRequest;
 import com.restaurants.api.resource.AddressResource;
 import com.restaurants.modules.restaurant.service.AddressService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,8 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AddressController implements AddressResource {
 
-    @Autowired
-    private AddressService service;
+    private final AddressService service;
 
     @Override
     @GetMapping("/{id}")
@@ -26,7 +24,7 @@ public class AddressController implements AddressResource {
     }
 
     @Override
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public AddressDto update(@PathVariable UUID id, @RequestBody AddressRequest request) throws AddressException {
         return service.update(id, request);
     }

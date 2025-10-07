@@ -10,12 +10,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-@Schema(description = "Запрос на обновление ресторана")
+
+/*CreateRestaurantRequest — это класс, который представляет собой запрос на создание нового ресторана.
+Он содержит поле name, которое помечено аннотацией @NotBlank, что указывает на то, что это поле обязательно для заполнения.
+Этот класс может использоваться в методах контроллера для получения данных от клиента при создании нового ресторана.*/
+
+@Schema(description = "Запрос на создание нового ресторана")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(fluent = true)
-public class UpdateRestaurantRequest {
+public class RestaurantRequest {
 
     @Schema(description = "Название ресторана")
     @JsonProperty("name")
@@ -39,5 +44,9 @@ public class UpdateRestaurantRequest {
     @Schema(description = "Вебсайт ресторана")
     @JsonProperty("website")
     private String website;
+
+    @Schema(description = "Статус")
+    @JsonProperty("status")
+    private String status;
 
 }

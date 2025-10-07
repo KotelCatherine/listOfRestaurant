@@ -48,4 +48,8 @@ public class RestaurantDto {
     @JsonProperty("website")
     private String website;
 
+    @Schema(description = "Статус")
+    @JsonProperty("status")
+    private String status;
+
 }

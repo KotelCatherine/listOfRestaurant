@@ -1,27 +1,22 @@
 CREATE TABLE IF NOT EXISTS restaurants
 (
 
-    id           uuid PRIMARY KEY,
-    version_id   bigint    NOT NULL DEFAULT 1,
-    name         text      NOT NULL,
-    description  text,
-    phone        text,
-    email        text,
-    website      text,
-    status       text      NOT NULL,
-    opening_date date,
-    created_at   timestamp NOT NULL,
-    created_by   text      NOT NULL,
-    updated_at   timestamp,
-    updated_by   text
+    id          uuid PRIMARY KEY,
+    version_id  bigint NOT NULL DEFAULT 1,
+    name        text   NOT NULL,
+    description text,
+    phone       text,
+    email       text,
+    website     text,
+    status      text   NOT NULL,
+    updated_at  timestamp
 
 );
 
 CREATE TABLE IF NOT EXISTS cuisines
 (
 
-    id          uuid   PRIMARY KEY,
-    version_id  bigint NOT NULL DEFAULT 1,
+    id          uuid PRIMARY KEY,
     name        text   NOT NULL,
     description text
 
@@ -45,8 +40,6 @@ CREATE TABLE IF NOT EXISTS addresses
     city          text NOT NULL,
     street        text NOT NULL,
     building      text NOT NULL,
-    apartment     text,
-    postal_code   text,
     latitude      double precision,
     longitude     double precision
 
@@ -70,8 +63,7 @@ CREATE TABLE IF NOT EXISTS menu_categories
     id            uuid PRIMARY KEY,
     restaurant_id uuid NOT NULL,
     name          text NOT NULL,
-    description   text,
-    position      integer
+    description   text
 
 );
 
@@ -83,8 +75,6 @@ CREATE TABLE IF NOT EXISTS menu_items
     name             text           NOT NULL,
     description      text,
     price            numeric(10, 2) NOT NULL,
-    position         integer,
-    is_available     boolean DEFAULT TRUE,
     image_url        text
 
 );

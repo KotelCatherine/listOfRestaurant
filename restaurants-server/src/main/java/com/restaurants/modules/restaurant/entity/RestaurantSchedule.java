@@ -9,24 +9,34 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Data
-@Entity(name = "cuisines")
+@Entity(name = "restaurant_schedules")
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Accessors(fluent = true)
-public class Cuisine {
+public class RestaurantSchedule {
 
     @Id
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "restaurant_id")
+    private UUID restaurantId;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "day_of_week")
+    private int dayOfWeek;
+
+    @Column(name = "open_time")
+    private LocalTime openTime;
+
+    @Column(name = "close_time")
+    private LocalTime closeTime;
+
+    @Column(name = "is_closed")
+    private boolean isClosed;
 
 }

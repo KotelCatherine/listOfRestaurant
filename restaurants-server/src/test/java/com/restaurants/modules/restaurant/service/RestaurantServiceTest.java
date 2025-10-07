@@ -4,8 +4,7 @@ import com.restaurants.TestContainerInitialization;
 import com.restaurants.api.exception.RestaurantErrorCodeEnum;
 import com.restaurants.api.exception.RestaurantException;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
-import com.restaurants.api.modules.restaurant.request.CreateRestaurantRequest;
-import com.restaurants.api.modules.restaurant.request.UpdateRestaurantRequest;
+import com.restaurants.api.modules.restaurant.request.RestaurantRequest;
 import com.restaurants.modules.restaurant.entity.Restaurant;
 import com.restaurants.modules.restaurant.repository.RestaurantRepository;
 import jakarta.transaction.Transactional;
@@ -46,7 +45,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     void create_whenRestaurantNameExist_thenThrow() {
 
         createRestaurant(DEFAULT_RESTAURANT_NAME);
-        CreateRestaurantRequest request = getCreateRestaurantRequest(DEFAULT_RESTAURANT_NAME, null, null);
+        RestaurantRequest request = getCreateRestaurantRequest(DEFAULT_RESTAURANT_NAME, null, null);
 
         RestaurantException exception = Assertions.assertThrows(RestaurantException.class, () -> restaurantService.create(request));
         Assertions.assertEquals(RestaurantErrorCodeEnum.RESTAURANT_NAME_ALREADY_EXISTS.errorCode(), exception.errorCode());
@@ -58,7 +57,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     @Transactional
     void create_whenEmailAndPhoneValid_thenCreate(String phone, String email) {
 
-        CreateRestaurantRequest request = getCreateRestaurantRequest(DEFAULT_RESTAURANT_NAME, phone, email);
+        RestaurantRequest request = getCreateRestaurantRequest(DEFAULT_RESTAURANT_NAME, phone, email);
 
         Assertions.assertDoesNotThrow(() -> restaurantService.create(request));
 
@@ -69,7 +68,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     @Transactional
     void create_whenEmailAndPhoneInvalid_thenThrow(String phone, String email) {
 
-        CreateRestaurantRequest request = getCreateRestaurantRequest(DEFAULT_RESTAURANT_NAME, phone, email);
+        RestaurantRequest request = getCreateRestaurantRequest(DEFAULT_RESTAURANT_NAME, phone, email);
 
         Assertions.assertThrows(ConstraintViolationException.class, () -> restaurantService.create(request));
 
@@ -80,7 +79,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     void create_whenRestaurantNameNotExist_thenCreate() {
 
         createRestaurant(DEFAULT_RESTAURANT_NAME);
-        CreateRestaurantRequest request = getCreateRestaurantRequest("naumnaum", null, null);
+        RestaurantRequest request = getCreateRestaurantRequest("naumnaum", null, null);
 
         RestaurantDto result = Assertions.assertDoesNotThrow(() -> restaurantService.create(request));
 
@@ -129,7 +128,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
         Restaurant restaurant = createRestaurant(DEFAULT_RESTAURANT_NAME);
         UUID id = restaurant.id();
 
-        UpdateRestaurantRequest request = getUpdateRestaurantRequest(null, null);
+        RestaurantRequest request = getUpdateRestaurantRequest(null, null);
 
         RestaurantDto result = Assertions.assertDoesNotThrow(() -> restaurantService.update(id, request));
 
@@ -143,7 +142,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     void update_whenPhoneAndEmailValid_thenUpdate(String phone, String email) {
 
         Restaurant restaurant = createRestaurant(DEFAULT_RESTAURANT_NAME);
-        UpdateRestaurantRequest request = getUpdateRestaurantRequest(phone, email);
+        RestaurantRequest request = getUpdateRestaurantRequest(phone, email);
         UUID id = restaurant.id();
 
         RestaurantDto result = Assertions.assertDoesNotThrow(() -> restaurantService.update(id, request));
@@ -158,7 +157,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     void update_whenPhoneAndEmailInvalid_thenThrow(String phone, String email) {
 
         Restaurant restaurant = createRestaurant(DEFAULT_RESTAURANT_NAME);
-        UpdateRestaurantRequest request = getUpdateRestaurantRequest(phone, email);
+        RestaurantRequest request = getUpdateRestaurantRequest(phone, email);
         UUID id = restaurant.id();
 
         Assertions.assertThrows(ConstraintViolationException.class, () -> restaurantService.update(id, request));
@@ -189,15 +188,15 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     }
 
 
-    private CreateRestaurantRequest getCreateRestaurantRequest(String name, String phone, String email) {
-        return new CreateRestaurantRequest()
+    private RestaurantRequest getCreateRestaurantRequest(String name, String phone, String email) {
+        return new RestaurantRequest()
                 .name(name)
                 .phone(phone)
                 .email(email);
     }
 
-    private UpdateRestaurantRequest getUpdateRestaurantRequest(String phone, String email) {
-        return new UpdateRestaurantRequest()
+    private RestaurantRequest getUpdateRestaurantRequest(String phone, String email) {
+        return new RestaurantRequest()
                 .name(DEFAULT_RESTAURANT_NAME)
                 .phone(phone)
                 .email(email);
@@ -207,11 +206,8 @@ public class RestaurantServiceTest extends TestContainerInitialization {
 
         Restaurant restaurant = new Restaurant()
                 .id(UUID.randomUUID())
-                .versionId(BigInteger.valueOf(1))
                 .name(name)
-                .status("Active")
-                .createdAt(LocalDateTime.now())
-                .createdBy("admin");
+                .status("Active");
 
         restaurant = restaurantRepository.saveAndFlush(restaurant);
 
@@ -222,7 +218,7 @@ public class RestaurantServiceTest extends TestContainerInitialization {
     @Test
     void create_whenRestaurantDoesNotExist_thenCreate() throws RestaurantException {
 
-        CreateRestaurantRequest request = new CreateRestaurantRequest();
+        RestaurantRequest request = new RestaurantRequest();
         request.name("FoodCore");
 
         restaurantService.create(request);
