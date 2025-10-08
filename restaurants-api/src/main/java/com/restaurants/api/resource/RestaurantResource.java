@@ -3,13 +3,11 @@ package com.restaurants.api.resource;
 
 import com.restaurants.api.exception.CuisineException;
 import com.restaurants.api.exception.RestaurantException;
-import com.restaurants.api.modules.restaurant.dto.AddressDto;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.dto.MenuCategoryDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
-import com.restaurants.api.modules.restaurant.request.AddressRequest;
-import com.restaurants.api.modules.restaurant.request.RestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.MenuCategoryRequest;
+import com.restaurants.api.modules.restaurant.request.RestaurantRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -71,11 +69,6 @@ public interface RestaurantResource {
     @Operation(operationId = "createRestaurantCuisineUsingPost", summary = "Создание связи между кухней и рестораном")
     @ResponseStatus(HttpStatus.CREATED)
     CuisineDto createRestaurantCuisine(@PathVariable UUID restaurantId, @PathVariable UUID cuisineId) throws RestaurantException, CuisineException;
-
-    @PostMapping("/{restaurantId}/address")
-    @Operation(operationId = "createAddressByRestaurantIdUsingPost", summary = "Создание адреса у ресторана")
-    @ResponseStatus(HttpStatus.CREATED)
-    AddressDto createAddress(@PathVariable UUID restaurantId, @Valid @RequestBody AddressRequest request) throws RestaurantException;
 
     @PostMapping("/{restaurantId}/menuCategory")
     @Operation(operationId = "createMenuCategoryUsingPost", summary = "Создание категории меню")

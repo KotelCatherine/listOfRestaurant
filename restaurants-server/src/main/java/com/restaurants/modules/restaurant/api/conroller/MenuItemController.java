@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("menuItem")
+@RequestMapping("/menuItem")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class MenuItemController implements MenuItemResource {
 
     private final MenuItemService service;

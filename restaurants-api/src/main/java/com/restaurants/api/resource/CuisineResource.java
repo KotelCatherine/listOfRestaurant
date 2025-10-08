@@ -17,15 +17,20 @@ import java.util.UUID;
 @Tag(name = "Cuisine", description = "Кухни")
 public interface CuisineResource {
 
-    @GetMapping("/cuisines")
-    @Operation(operationId = "getAllCuisines", summary = "Получить все типы кухонь")
-    @ResponseStatus(HttpStatus.OK)
-    Page<CuisineDto> getAllCuisines(@ParameterObject Pageable pageable);
-
     @PostMapping
     @Operation(operationId = "addCuisine", summary = "Добавить кухню")
     @ResponseStatus(HttpStatus.CREATED)
     CuisineDto createCuisine(@Valid @RequestBody CuisineRequest request) throws CuisineException;
+
+    @GetMapping("/{id}")
+    @Operation(operationId = "findCuisinesByIdUsingGet", summary = "Поиск кухни")
+    @ResponseStatus(HttpStatus.OK)
+    CuisineDto findById(@PathVariable UUID id) throws CuisineException;
+
+    @GetMapping("/cuisines")
+    @Operation(operationId = "getAllCuisines", summary = "Получить все типы кухонь")
+    @ResponseStatus(HttpStatus.OK)
+    Page<CuisineDto> getAllCuisines(@ParameterObject Pageable pageable);
 
     @PutMapping("/{id}")
     @Operation(operationId = "updateCuisine", summary = "Обновить кухню")

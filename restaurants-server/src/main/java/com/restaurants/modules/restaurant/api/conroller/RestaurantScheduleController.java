@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping(value = "restaurantSchedule")
+@RequestMapping(value = "/restaurantSchedule")
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class RestaurantScheduleController implements RestaurantScheduleResource {
 
     private final RestaurantScheduleService service;

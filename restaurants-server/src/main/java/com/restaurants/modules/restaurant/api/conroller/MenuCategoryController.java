@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RequestMapping(value = "menu-category")
+@RequestMapping(value = "/menu-category")
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class MenuCategoryController implements MenuCategoryResource {
 
     private final MenuCategoryService service;

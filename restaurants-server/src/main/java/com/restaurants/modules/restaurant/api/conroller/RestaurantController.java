@@ -3,13 +3,11 @@ package com.restaurants.modules.restaurant.api.conroller;
 
 import com.restaurants.api.exception.CuisineException;
 import com.restaurants.api.exception.RestaurantException;
-import com.restaurants.api.modules.restaurant.dto.AddressDto;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.dto.MenuCategoryDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
-import com.restaurants.api.modules.restaurant.request.AddressRequest;
-import com.restaurants.api.modules.restaurant.request.RestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.MenuCategoryRequest;
+import com.restaurants.api.modules.restaurant.request.RestaurantRequest;
 import com.restaurants.api.resource.RestaurantResource;
 import com.restaurants.modules.restaurant.service.RestaurantService;
 import jakarta.validation.Valid;
@@ -22,9 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping(value = "restaurant")
+@RequestMapping(value = "/restaurant")
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class RestaurantController implements RestaurantResource {
 
     private final RestaurantService restaurantService;
@@ -69,7 +68,7 @@ public class RestaurantController implements RestaurantResource {
 
     @Override
     @GetMapping("/{id}/cuisines")
-    public List<CuisineDto> findAllCuisinesByRestaurantId(@PathVariable UUID id) throws RestaurantException {
+    public List<CuisineDto> findAllCuisinesByRestaurantId(@PathVariable UUID id) {
         return restaurantService.findAllCuisines(id);
     }
 
@@ -83,12 +82,6 @@ public class RestaurantController implements RestaurantResource {
     @PostMapping("/cuisines/{restaurantId}/{cuisineId}")
     public CuisineDto createRestaurantCuisine(@PathVariable UUID restaurantId, @PathVariable UUID cuisineId) throws RestaurantException, CuisineException {
         return restaurantService.createRestaurantCuisine(restaurantId, cuisineId);
-    }
-
-    @Override
-    @PostMapping("/{restaurantId}/address")
-    public AddressDto createAddress(@PathVariable UUID restaurantId, @Valid @RequestBody AddressRequest request) throws RestaurantException {
-        return restaurantService.createAddress(restaurantId, request);
     }
 
     @Override

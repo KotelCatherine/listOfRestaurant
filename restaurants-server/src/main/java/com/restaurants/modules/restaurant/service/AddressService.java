@@ -2,11 +2,15 @@ package com.restaurants.modules.restaurant.service;
 
 import com.restaurants.api.exception.AddressErrorCodeEnum;
 import com.restaurants.api.exception.AddressException;
+import com.restaurants.api.exception.RestaurantErrorCodeEnum;
+import com.restaurants.api.exception.RestaurantException;
 import com.restaurants.api.modules.restaurant.dto.AddressDto;
 import com.restaurants.api.modules.restaurant.request.AddressRequest;
 import com.restaurants.modules.restaurant.entity.Address;
 import com.restaurants.modules.restaurant.mapper.AddressMapper;
 import com.restaurants.modules.restaurant.repository.AddressRepository;
+import com.restaurants.modules.restaurant.repository.RestaurantRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,8 +26,25 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AddressService {
 
+    private final RestaurantRepository restaurantRepository;
     private final AddressRepository repository;
+
     private final AddressMapper mapper;
+
+    @Transactional(rollbackFor = Exception.class)
+    public AddressDto createAddress(UUID restaurantId, @Valid AddressRequest request) throws RestaurantException {
+
+        if (!restaurantRepository.existsById(restaurantId)) {
+            throw new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID);
+        }
+
+        Address address = mapper.mapToEntity(restaurantId, request);
+
+        repository.saveAndFlush(address);
+
+        return mapper.mapToAddressDto(address);
+
+    }
 
     public AddressDto findById(UUID id) throws AddressException {
 

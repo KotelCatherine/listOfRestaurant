@@ -4,18 +4,21 @@ import com.restaurants.api.exception.CuisineErrorCodeEnum;
 import com.restaurants.api.exception.CuisineException;
 import com.restaurants.api.exception.RestaurantErrorCodeEnum;
 import com.restaurants.api.exception.RestaurantException;
-import com.restaurants.api.modules.restaurant.dto.AddressDto;
 import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.dto.MenuCategoryDto;
 import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
-import com.restaurants.api.modules.restaurant.request.AddressRequest;
-import com.restaurants.api.modules.restaurant.request.RestaurantRequest;
 import com.restaurants.api.modules.restaurant.request.MenuCategoryRequest;
-import com.restaurants.modules.restaurant.entity.*;
-import com.restaurants.modules.restaurant.mapper.AddressMapper;
+import com.restaurants.api.modules.restaurant.request.RestaurantRequest;
+import com.restaurants.modules.restaurant.entity.Cuisine;
+import com.restaurants.modules.restaurant.entity.MenuCategory;
+import com.restaurants.modules.restaurant.entity.Restaurant;
+import com.restaurants.modules.restaurant.entity.RestaurantCuisines;
 import com.restaurants.modules.restaurant.mapper.MenuCategoryMapper;
 import com.restaurants.modules.restaurant.mapper.RestaurantMapper;
-import com.restaurants.modules.restaurant.repository.*;
+import com.restaurants.modules.restaurant.repository.CuisinesRepository;
+import com.restaurants.modules.restaurant.repository.MenuCategoryRepository;
+import com.restaurants.modules.restaurant.repository.RestaurantCuisinesRepository;
+import com.restaurants.modules.restaurant.repository.RestaurantRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,11 +44,9 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final RestaurantCuisinesRepository restaurantCuisinesRepository;
     private final CuisinesRepository cuisinesRepository;
-    private final AddressRepository addressRepository;
     private final MenuCategoryRepository menuCategoryRepository;
 
     private final RestaurantMapper restaurantMapper;
-    private final AddressMapper addressMapper;
     private final MenuCategoryMapper menuCategoryMapper;
 
     @Transactional(rollbackFor = Exception.class)
@@ -113,7 +114,14 @@ public class RestaurantService {
         List<RestaurantDto> restaurantsDto = new ArrayList<>();
 
         for (Restaurant restaurant : restaurants) {
-            restaurantsDto.add(new RestaurantDto().name(restaurant.name()));
+            restaurantsDto.add(new RestaurantDto()
+                            .id(restaurant.id())
+                    .name(restaurant.name())
+                    .description(restaurant.description())
+                    .phone(restaurant.phone())
+                    .email(restaurant.email())
+                    .website(restaurant.website())
+                    .status(restaurant.status()));
         }
 
         return restaurantsDto;
@@ -177,19 +185,6 @@ public class RestaurantService {
         restaurantCuisinesRepository.saveAndFlush(restaurantCuisines);
 
         return restaurantMapper.mapToCuisineDto(cuisine);
-
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public AddressDto createAddress(UUID restaurantId, @Valid AddressRequest request) throws RestaurantException {
-
-        extracted(restaurantId);
-
-        Address address = addressMapper.mapToEntity(restaurantId, request);
-
-        addressRepository.saveAndFlush(address);
-
-        return addressMapper.mapToAddressDto(address);
 
     }
 

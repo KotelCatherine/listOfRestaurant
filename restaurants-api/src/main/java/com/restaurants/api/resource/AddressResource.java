@@ -1,10 +1,12 @@
 package com.restaurants.api.resource;
 
 import com.restaurants.api.exception.AddressException;
+import com.restaurants.api.exception.RestaurantException;
 import com.restaurants.api.modules.restaurant.dto.AddressDto;
 import com.restaurants.api.modules.restaurant.request.AddressRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,12 +15,10 @@ import java.util.UUID;
 @Tag(name = "Address", description = "Адрес")
 public interface AddressResource {
 
-/*
-    @PostMapping("/{restaurantId}")
-    @Operation(summary = "createAddressByRestaurantIdUsingPost", description = "Создание адреса")
+    @PostMapping("/{restaurantId}/address")
+    @Operation(operationId = "createAddressByRestaurantIdUsingPost", summary = "Создание адреса у ресторана")
     @ResponseStatus(HttpStatus.CREATED)
-    AddressDto create(@PathVariable UUID restaurantId, @RequestBody AddressRequest request) throws RestaurantException;
-*/
+    AddressDto createAddress(@PathVariable UUID restaurantId, @Valid @RequestBody AddressRequest request) throws RestaurantException;
 
     @GetMapping("/{id}")
     @Operation(summary = "findAddressByIdUsingGet", description = "Поиск адреса по идентификатору")

@@ -40,7 +40,6 @@ public class CuisineService {
 
         return mapper.mapToCuisineDto(cuisine);
 
-
     }
 
     public Page<CuisineDto> getAllCuisines(Pageable pageable) {
@@ -63,6 +62,15 @@ public class CuisineService {
         cuisine = mapper.mapToCuisine(request, cuisine);
 
         repository.saveAndFlush(cuisine);
+
+        return mapper.mapToCuisineDto(cuisine);
+
+    }
+
+    public CuisineDto findById(UUID id) throws CuisineException {
+
+        Cuisine cuisine = repository.findById(id)
+                .orElseThrow(() -> new CuisineException(CuisineErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
 
         return mapper.mapToCuisineDto(cuisine);
 

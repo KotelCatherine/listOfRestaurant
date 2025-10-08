@@ -2,13 +2,18 @@ package com.restaurants.modules.restaurant.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -22,6 +27,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Accessors(fluent = true)
+@EntityListeners(AuditingEntityListener.class)
+@EnableJpaAuditing
 public class Restaurant {
 
     @Id
@@ -45,5 +52,10 @@ public class Restaurant {
 
     @Column(name = "status")
     private String status;
+
+    @Column(name = "updated_at")
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
 
 }
