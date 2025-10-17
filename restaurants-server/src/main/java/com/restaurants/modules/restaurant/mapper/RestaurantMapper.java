@@ -5,6 +5,7 @@ import com.restaurants.api.modules.restaurant.dto.RestaurantDto;
 import com.restaurants.api.modules.restaurant.request.RestaurantRequest;
 import com.restaurants.modules.restaurant.entity.Cuisine;
 import com.restaurants.modules.restaurant.entity.Restaurant;
+import com.restaurants.modules.restaurant.entity.RestaurantCuisines;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -51,6 +52,13 @@ public class RestaurantMapper {
                 .id(cuisine.id())
                 .name(cuisine.name())
                 .description(cuisine.description());
+    }
+
+    public static RestaurantCuisines mapToRestaurantCuisine(Cuisine cuisine, Restaurant restaurant) {
+        return new RestaurantCuisines()
+                .id(UUID.randomUUID())
+                .cuisineId(cuisine.id())
+                .restaurantId(restaurant.id());
     }
 
 }

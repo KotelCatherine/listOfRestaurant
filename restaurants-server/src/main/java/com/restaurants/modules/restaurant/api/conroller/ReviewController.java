@@ -55,4 +55,9 @@ public class ReviewController implements ReviewResource{
         service.delete(id);
     }
 
+    @GetMapping("/averageRatingReview/{restaurantId}")
+    public int averageRatingReview(@PathVariable UUID restaurantId) throws ReviewException {
+        return service.averageRatingReview(restaurantId);
+    }
+
 }

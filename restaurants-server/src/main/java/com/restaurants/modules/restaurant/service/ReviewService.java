@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.UUID;
 
 @Slf4j
@@ -99,6 +100,19 @@ public class ReviewService {
         }
 
         repository.deleteById(id);
+
+    }
+
+    public int averageRatingReview(UUID restaurantId) throws ReviewException {
+
+        List<Review> reviews = repository.findAllByRestaurantId(restaurantId);
+
+        double average = reviews.stream()
+                .mapToDouble(Review::rating)
+                .average()
+                .orElse(0.0);
+
+        return (int) Math.round(average);
 
     }
 

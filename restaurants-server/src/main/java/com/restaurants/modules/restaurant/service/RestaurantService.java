@@ -54,11 +54,29 @@ public class RestaurantService {
 
         checkName(request.name());
         Restaurant restaurant = restaurantMapper.mapToEntity(request);
+
         restaurantRepository.saveAndFlush(restaurant);
+
+        if (request.cuisineId() != null && !request.cuisineId().isEmpty()) {
+
+            for (UUID cuisineId : request.cuisineId()) {
+
+                Cuisine cuisine = cuisinesRepository.findById(cuisineId)
+                        .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
+
+                RestaurantCuisines restaurantCuisine = restaurantMapper.mapToRestaurantCuisine(cuisine, restaurant);
+
+                restaurantCuisinesRepository.saveAndFlush(restaurantCuisine);
+
+            }
+
+        }
 
         return restaurantMapper.mapToRestaurantDto(restaurant);
 
     }
+
+
 
     public RestaurantDto findById(UUID id) throws RestaurantException {
 
@@ -78,6 +96,19 @@ public class RestaurantService {
         Restaurant updatedRestaurant = restaurantMapper.mapToRestaurant(request, restaurant);
 
         restaurantRepository.saveAndFlush(restaurant);
+
+        // Создаем новые связи
+        if (request.cuisineId() != null && !request.cuisineId().isEmpty()) {
+            for (UUID cuisineId : request.cuisineId()) {
+                Cuisine cuisine = cuisinesRepository.findById(cuisineId)
+                        .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID));
+
+                RestaurantCuisines restaurantCuisine = restaurantMapper.mapToRestaurantCuisine(cuisine, restaurant);
+
+                restaurantCuisinesRepository.saveAndFlush(restaurantCuisine);
+
+            }
+        }
 
         return restaurantMapper.mapToRestaurantDto(updatedRestaurant);
 

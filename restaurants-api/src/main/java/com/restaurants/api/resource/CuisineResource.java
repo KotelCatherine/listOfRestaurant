@@ -6,12 +6,10 @@ import com.restaurants.api.modules.restaurant.request.CuisineRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Cuisine", description = "Кухни")
@@ -27,10 +25,10 @@ public interface CuisineResource {
     @ResponseStatus(HttpStatus.OK)
     CuisineDto findById(@PathVariable UUID id) throws CuisineException;
 
-    @GetMapping("/cuisines")
+    @GetMapping
     @Operation(operationId = "getAllCuisines", summary = "Получить все типы кухонь")
     @ResponseStatus(HttpStatus.OK)
-    Page<CuisineDto> getAllCuisines(@ParameterObject Pageable pageable);
+    List<CuisineDto> getAllCuisines();
 
     @PutMapping("/{id}")
     @Operation(operationId = "updateCuisine", summary = "Обновить кухню")

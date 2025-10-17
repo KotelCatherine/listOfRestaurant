@@ -10,6 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+import java.util.UUID;
+
 
 /*CreateRestaurantRequest — это класс, который представляет собой запрос на создание нового ресторана.
 Он содержит поле name, которое помечено аннотацией @NotBlank, что указывает на то, что это поле обязательно для заполнения.
@@ -48,5 +51,9 @@ public class RestaurantRequest {
     @Schema(description = "Статус")
     @JsonProperty("status")
     private String status;
+
+    @Schema(description = "Список кухонь")
+    @JsonProperty("cuisines")
+    private List<UUID> cuisineId;
 
 }

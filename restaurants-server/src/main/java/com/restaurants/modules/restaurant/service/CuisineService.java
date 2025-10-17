@@ -11,13 +11,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -30,7 +28,7 @@ public class CuisineService {
     private final CuisinesRepository repository;
     private final CuisineMapper mapper;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public CuisineDto createCuisine(@Valid CuisineRequest request) throws CuisineException {
 
         chekName(request.name());
@@ -42,18 +40,17 @@ public class CuisineService {
 
     }
 
-    public Page<CuisineDto> getAllCuisines(Pageable pageable) {
+    public List<CuisineDto> getAllCuisines() {
 
-        if (!pageable.getSort().isSorted()) {
-            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-        }
+        List<Cuisine> cuisines = repository.findAll();
 
-        Page<Cuisine> cuisines = repository.findAll(pageable);
-
-        return cuisines.map(mapper::mapToCuisineDto);
+        return cuisines.stream()
+                .map(mapper::mapToCuisineDto)
+                .toList();
 
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public CuisineDto updateCuisine(UUID cuisineId, @Valid CuisineRequest request) throws CuisineException {
 
         Cuisine cuisine = repository.findById(cuisineId)
@@ -82,6 +79,11 @@ public class CuisineService {
             throw new CuisineException(CuisineErrorCodeEnum.CUISINE_NAME_ALREADY_EXISTS);
         }
 
+    }
+
+    @Transactional(rollbackFor =  Exception.class)
+    public void delete(UUID id) {
+        repository.deleteById(id);
     }
 
 }

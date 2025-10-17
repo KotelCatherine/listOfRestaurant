@@ -4,13 +4,11 @@ import com.restaurants.api.modules.restaurant.dto.CuisineDto;
 import com.restaurants.api.modules.restaurant.request.CuisineRequest;
 import com.restaurants.modules.restaurant.entity.Cuisine;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
-@RequiredArgsConstructor
 public class CuisineMapper {
 
     public Cuisine mapToEntity(@Valid CuisineRequest request) {

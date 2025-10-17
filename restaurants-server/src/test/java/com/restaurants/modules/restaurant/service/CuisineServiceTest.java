@@ -61,7 +61,6 @@ class CuisineServiceTest extends TestContainerInitialization {
 
         Cuisine cuisine = new Cuisine()
                 .id(UUID.randomUUID())
-                .versionId(BigInteger.ONE)
                 .name(name);
 
         cuisine = repository.saveAndFlush(cuisine);

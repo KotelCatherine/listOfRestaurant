@@ -7,14 +7,12 @@ import com.restaurants.api.resource.CuisineResource;
 import com.restaurants.modules.restaurant.service.CuisineService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
-@RequestMapping(value = "/cuisine")
+@RequestMapping(value = "/cuisines")
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
@@ -24,8 +22,8 @@ public class CuisinesController implements CuisineResource {
 
     @Override
     @GetMapping
-    public Page<CuisineDto> getAllCuisines(@ParameterObject Pageable pageable) {
-        return service.getAllCuisines(pageable);
+    public List<CuisineDto> getAllCuisines() {
+        return service.getAllCuisines();
     }
 
     @Override
@@ -49,7 +47,7 @@ public class CuisinesController implements CuisineResource {
     @Override
     @DeleteMapping("/{id}")
     public void deleteCuisine(@PathVariable UUID id) {
-
+        service.delete(id);
     }
 
 }
