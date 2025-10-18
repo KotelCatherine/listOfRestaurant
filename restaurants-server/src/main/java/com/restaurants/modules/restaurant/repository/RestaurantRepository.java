@@ -1,6 +1,8 @@
 package com.restaurants.modules.restaurant.repository;
 
 import com.restaurants.modules.restaurant.entity.Restaurant;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,6 +23,10 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
             where lower(r.name) like lower(concat('%', :query, '%'))
             """)
     List<Restaurant> findByName(@Param("query") String query);
+
+    @Query("SELECT r FROM restaurants r WHERE r.id IN :ids")
+    Page<Restaurant> findByIds(@Param("ids") List<UUID> ids, Pageable pageable);
+
 
     boolean existsByNameIgnoreCase(String name);
 

@@ -15,10 +15,7 @@ import com.restaurants.modules.restaurant.entity.Restaurant;
 import com.restaurants.modules.restaurant.entity.RestaurantCuisines;
 import com.restaurants.modules.restaurant.mapper.MenuCategoryMapper;
 import com.restaurants.modules.restaurant.mapper.RestaurantMapper;
-import com.restaurants.modules.restaurant.repository.CuisinesRepository;
-import com.restaurants.modules.restaurant.repository.MenuCategoryRepository;
-import com.restaurants.modules.restaurant.repository.RestaurantCuisinesRepository;
-import com.restaurants.modules.restaurant.repository.RestaurantRepository;
+import com.restaurants.modules.restaurant.repository.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Validated
@@ -48,6 +46,7 @@ public class RestaurantService {
 
     private final RestaurantMapper restaurantMapper;
     private final MenuCategoryMapper menuCategoryMapper;
+    private final AddressRepository addressRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public RestaurantDto create(@Valid RestaurantRequest request) throws RestaurantException {
@@ -75,7 +74,6 @@ public class RestaurantService {
         return restaurantMapper.mapToRestaurantDto(restaurant);
 
     }
-
 
 
     public RestaurantDto findById(UUID id) throws RestaurantException {
@@ -146,7 +144,7 @@ public class RestaurantService {
 
         for (Restaurant restaurant : restaurants) {
             restaurantsDto.add(new RestaurantDto()
-                            .id(restaurant.id())
+                    .id(restaurant.id())
                     .name(restaurant.name())
                     .description(restaurant.description())
                     .phone(restaurant.phone())
@@ -232,6 +230,20 @@ public class RestaurantService {
 
     }
 
+    public Page<RestaurantDto> getRestaurantsByCity(String city, Pageable pageable) {
+
+        if (!pageable.getSort().isSorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        }
+
+        List<UUID> restaurantIds = addressRepository.findAllRestaurantIdByCity(city);
+
+        Page<Restaurant> restaurants = restaurantRepository.findByIds(restaurantIds, pageable);
+
+        return restaurants.map(restaurantMapper::mapToRestaurantDto);
+
+    }
+
     private void extracted(UUID restaurantId) throws RestaurantException {
         if (!restaurantRepository.existsById(restaurantId)) {
             throw new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID);
@@ -245,5 +257,6 @@ public class RestaurantService {
         }
 
     }
+
 
 }

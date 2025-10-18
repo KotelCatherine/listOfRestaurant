@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequestMapping(value = "/address")
@@ -30,6 +31,11 @@ public class AddressController implements AddressResource {
     @GetMapping("/{id}")
     public AddressDto findAddressById(@PathVariable UUID id) throws AddressException {
         return service.findById(id);
+    }
+
+    @GetMapping("/cities")
+    public List<String> findAllCities() {
+        return service.findAllCities();
     }
 
     @Override

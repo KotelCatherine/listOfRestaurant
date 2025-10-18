@@ -90,4 +90,9 @@ public class RestaurantController implements RestaurantResource {
         return restaurantService.createMenuCategory(restaurantId, request);
     }
 
+    @GetMapping("/city")
+    public Page<RestaurantDto> getRestaurantsByCity(@RequestParam String city, @ParameterObject Pageable pageable) {
+        return restaurantService.getRestaurantsByCity(city, pageable);
+    }
+
 }
