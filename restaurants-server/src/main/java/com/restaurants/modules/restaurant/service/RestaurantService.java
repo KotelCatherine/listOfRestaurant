@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Validated
@@ -56,9 +55,9 @@ public class RestaurantService {
 
         restaurantRepository.saveAndFlush(restaurant);
 
-        if (request.cuisineId() != null && !request.cuisineId().isEmpty()) {
+        if (request.cuisineIds() != null && !request.cuisineIds().isEmpty()) {
 
-            for (UUID cuisineId : request.cuisineId()) {
+            for (UUID cuisineId : request.cuisineIds()) {
 
                 Cuisine cuisine = cuisinesRepository.findById(cuisineId)
                         .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_CUISINE_BY_ID));
@@ -74,7 +73,6 @@ public class RestaurantService {
         return restaurantMapper.mapToRestaurantDto(restaurant);
 
     }
-
 
     public RestaurantDto findById(UUID id) throws RestaurantException {
 
@@ -95,9 +93,8 @@ public class RestaurantService {
 
         restaurantRepository.saveAndFlush(restaurant);
 
-        // Создаем новые связи
-        if (request.cuisineId() != null && !request.cuisineId().isEmpty()) {
-            for (UUID cuisineId : request.cuisineId()) {
+        if (request.cuisineIds() != null && !request.cuisineIds().isEmpty()) {
+            for (UUID cuisineId : request.cuisineIds()) {
                 Cuisine cuisine = cuisinesRepository.findById(cuisineId)
                         .orElseThrow(() -> new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID));
 
@@ -257,6 +254,5 @@ public class RestaurantService {
         }
 
     }
-
 
 }

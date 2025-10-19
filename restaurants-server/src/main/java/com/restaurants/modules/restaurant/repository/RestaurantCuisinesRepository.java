@@ -12,4 +12,6 @@ public interface RestaurantCuisinesRepository extends JpaRepository<RestaurantCu
     List<RestaurantCuisines> findAllByRestaurantId(UUID restaurantId);
 
     List<RestaurantCuisines> findAllByCuisineId(UUID cuisineId);
+
 }
+

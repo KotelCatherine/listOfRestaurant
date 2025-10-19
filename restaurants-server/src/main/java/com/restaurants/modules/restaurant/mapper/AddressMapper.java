@@ -18,6 +18,7 @@ public class AddressMapper {
                 .country(request.country())
                 .city(request.city())
                 .street(request.street())
+                .building(request.building())
                 .latitude(request.latitude())
                 .longitude(request.longitude());
     }
@@ -29,6 +30,7 @@ public class AddressMapper {
                 .country(address.country())
                 .city(address.city())
                 .street(address.street())
+                .building(address.building())
                 .latitude(address.latitude())
                 .longitude(address.longitude());
     }

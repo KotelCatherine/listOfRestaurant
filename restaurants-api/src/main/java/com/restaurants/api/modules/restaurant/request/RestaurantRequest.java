@@ -54,6 +54,6 @@ public class RestaurantRequest {
 
     @Schema(description = "Список кухонь")
     @JsonProperty("cuisines")
-    private List<UUID> cuisineId;
+    private List<UUID> cuisineIds;
 
 }

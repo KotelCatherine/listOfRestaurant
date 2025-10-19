@@ -40,7 +40,10 @@ springdoc:
 
 logging:
   level:
+    com.restaurants.modules.restaurant.service: DEBUG
+    com.restaurants.modules.restaurant.service.RestaurantService: INFO
     org:
       springframework:
         validation: debug
     web: debug
+

@@ -37,10 +37,10 @@ public class AddressRequest {
 
     @Schema(description = "Широта")
     @JsonProperty("latitude")
-    private double latitude;
+    private Double latitude;
 
     @Schema(description = "Долгота")
     @JsonProperty("longitude")
-    private double longitude;
+    private Double longitude;
 
 }

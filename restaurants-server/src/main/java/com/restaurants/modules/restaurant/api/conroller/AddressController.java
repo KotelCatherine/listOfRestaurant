@@ -33,6 +33,11 @@ public class AddressController implements AddressResource {
         return service.findById(id);
     }
 
+    @GetMapping("/restaurant/{restaurantId}")
+    public AddressDto findAddressByRestaurantId(@PathVariable UUID restaurantId) throws RestaurantException {
+        return service.findAddressByRestaurantId(restaurantId);
+    }
+
     @GetMapping("/cities")
     public List<String> findAllCities() {
         return service.findAllCities();

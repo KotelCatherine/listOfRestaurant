@@ -54,7 +54,7 @@ public class RestaurantMapper {
                 .description(cuisine.description());
     }
 
-    public static RestaurantCuisines mapToRestaurantCuisine(Cuisine cuisine, Restaurant restaurant) {
+    public RestaurantCuisines mapToRestaurantCuisine(Cuisine cuisine, Restaurant restaurant) {
         return new RestaurantCuisines()
                 .id(UUID.randomUUID())
                 .cuisineId(cuisine.id())

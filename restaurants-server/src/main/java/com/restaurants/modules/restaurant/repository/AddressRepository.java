@@ -18,4 +18,6 @@ public interface AddressRepository extends JpaRepository<Address, UUID> {
     @Query("SELECT DISTINCT a.city FROM addresses a ORDER BY a.city")
     List<String> findAllCities();
 
+    Address findByRestaurantId(UUID restaurantId);
+
 }

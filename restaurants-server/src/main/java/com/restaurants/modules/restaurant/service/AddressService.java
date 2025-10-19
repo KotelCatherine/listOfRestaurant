@@ -85,4 +85,16 @@ public class AddressService {
         return repository.findAllCities();
     }
 
+    public AddressDto findAddressByRestaurantId(UUID restaurantId) throws RestaurantException {
+
+        if (!restaurantRepository.existsById(restaurantId)) {
+            throw new RestaurantException(RestaurantErrorCodeEnum.NOT_FOUND_RESTAURANT_BY_ID);
+        }
+
+        Address restaurantsAddress = repository.findByRestaurantId(restaurantId);
+
+        return mapper.mapToAddressDto(restaurantsAddress);
+
+    }
+
 }
